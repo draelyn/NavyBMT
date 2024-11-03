@@ -6,11 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draelyn's Navy Graduation Countdown</title>
     <style>
-        @font-face {
-            font-family: 'Shifty Notes Regular';
-            src: url('font/ShiftyNotesRegular-BWZ6d.ttf') format('truetype');
-        }
-
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -67,21 +62,21 @@
 <body>
     <h1>Draelyn's Navy Graduation Countdown</h1>
     <div id="countdown">Loading...</div>
-    <input type="text" id="fromInput" placeholder="From: (optional)">
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
-    <div id="charCounter">0/150</div> <!-- Character counter -->
+    <div id="charCounter">0/200</div> <!-- Character counter -->
     <div id="charLimitMessage"></div> <!-- Message for character limit -->
 
     <script>
         // Array of background images
         const backgroundImages = [
-            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for_free_simple_colorful_6860147_6.png',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for_free_simple_colorful_6860147_7.png',
-            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for_free_simple_colorful_6860147_8.png',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png'
+            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for_free_simple_colorful_6860147_6.png?ex=6728701e&is=67271e9e&hm=34e981a461ec2564df0701f32f36c00443d5996fbc6188015b9ca3da4c1a4050&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for_free_simple_colorful_6860147_7.png?ex=67287047&is=67271ec7&hm=def3c3c54105ef2811c2ca0898c7c4f40bc9db269551b1f29cb948b84affe168&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for_free_simple_colorful_6860147_8.png?ex=6728706a&is=67271eea&hm=d0252a3d828db119444847a593e02346a1d8e4cf268a2567e89327c6d2326d70&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png?ex=67286fdb&is=67271e5b&hm=0ca66ef71ca72ccafb7ac4cf3e430f61d7d7281eb2809f228779ae411877f18a&=&format=webp&quality=lossless',
+            // Add more image URLs here
         ];
 
         // Countdown Timer Script
@@ -106,66 +101,51 @@
         }
         countdown();
 
-        // Character limit and message posting logic
-        const fromInput = document.getElementById("fromInput");
+        // Sticky Notes Functionality
+        document.getElementById("postButton").addEventListener("click", postMessage);
         const messageInput = document.getElementById("messageInput");
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
 
+        // Update character count as the user types
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
-            charCounter.textContent = `${currentLength}/150`;
+            charCounter.textContent = `${currentLength}/200`;
 
-            if (currentLength > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
+            if (currentLength > 200) {
+                charLimitMessage.textContent = "Message cannot exceed 200 characters.";
             } else {
                 charLimitMessage.textContent = ""; // Clear message if within limit
             }
         });
 
-        document.getElementById("postButton").addEventListener("click", postMessage);
-
         function postMessage() {
             const message = messageInput.value;
-            const fromText = fromInput.value;
 
-            if (message.length > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-                return;
+            if (message.length > 200) {
+                charLimitMessage.textContent = "Message cannot exceed 200 characters.";
+                return; // Stop the function if message is too long
             }
 
             if (message.trim() !== "") {
-                createStickyNote(fromText, message);
-                messageInput.value = ""; // Clear message input after posting
-                fromInput.value = ""; // Clear the From field after posting
-                charCounter.textContent = "0/150"; // Reset counter
+                createStickyNote(message);
+                messageInput.value = ""; // Clear input after posting
+                charCounter.textContent = "0/200"; // Reset counter
             }
         }
 
-        function createStickyNote(fromText, message) {
+        function createStickyNote(message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
-            
+            note.textContent = message;
+
             // Set a random background image from the array
-            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
-            note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
+            const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+            note.style.backgroundImage = `url('${randomImage}')`;
 
-            // Add "From:" label if available
-            if (fromText.trim()) {
-                const fromLabel = document.createElement("div");
-                fromLabel.className = "from-label";
-                fromLabel.textContent = `From: ${fromText}`;
-                note.appendChild(fromLabel);
-            }
-
-            // Add message text
-            const messageText = document.createElement("div");
-            messageText.textContent = message;
-            note.appendChild(messageText);
-
-            // Set random initial position
-            note.style.left = `${Math.random() * (window.innerWidth - 150)}px`;
-            note.style.top = `${Math.random() * (window.innerHeight - 150)}px`;
+            // Set random starting position
+            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
 
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
@@ -177,7 +157,6 @@
 
         function mouseDown(event) {
             dragNote = event.target;
-            dragNote.style.zIndex = "1000"; // Bring the note to the front while dragging
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
             mouseMove(event); // Update position immediately
@@ -186,13 +165,12 @@
 
         function mouseMove(event) {
             if (dragNote) {
-                dragNote.style.left = `${event.clientX - dragNote.offsetWidth / 2}px`;
-                dragNote.style.top = `${event.clientY - dragNote.offsetHeight / 2}px`;
+                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
+                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
             }
         }
 
         function mouseUp() {
-            dragNote.style.zIndex = ""; // Reset z-index after dragging
             dragNote = null;
             document.removeEventListener("mousemove", mouseMove);
             document.removeEventListener("mouseup", mouseUp);
@@ -200,7 +178,6 @@
 
         function touchStart(event) {
             dragNote = event.target;
-            dragNote.style.zIndex = "1000"; // Bring to front on touch
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
             touchMove(event);
@@ -210,13 +187,12 @@
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                dragNote.style.left = `${touch.clientX - dragNote.offsetWidth / 2}px`;
-                dragNote.style.top = `${touch.clientY - dragNote.offsetHeight / 2}px`;
+                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
+                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
             }
         }
 
         function touchEnd() {
-            dragNote.style.zIndex = ""; // Reset z-index after dragging
             dragNote = null;
             document.removeEventListener("touchmove", touchMove);
             document.removeEventListener("touchend", touchEnd);
