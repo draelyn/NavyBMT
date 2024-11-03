@@ -145,9 +145,23 @@
             note.style.width = `${randomNote.width}px`;
             note.style.height = `${randomNote.height}px`;
 
-            // Set random starting position
-            note.style.left = Math.random() * (window.innerWidth - randomNote.width) + "px";
-            note.style.top = Math.random() * (window.innerHeight - randomNote.height) + "px";
+            // Check for overlapping and adjust position if necessary
+            let positionValid = false;
+            let attempts = 0;
+            const maxAttempts = 10;
+
+            while (!positionValid && attempts < maxAttempts) {
+                // Set random starting position
+                const left = Math.random() * (window.innerWidth - randomNote.width);
+                const top = Math.random() * (window.innerHeight - randomNote.height);
+
+                note.style.left = `${left}px`;
+                note.style.top = `${top}px`;
+
+                // Check for overlap
+                positionValid = !isOverlapping(note);
+                attempts++;
+            }
 
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
@@ -155,13 +169,22 @@
             document.body.appendChild(note);
         }
 
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
+        function isOverlapping(note) {
+            const noteRect = note.getBoundingClientRect();
+            const notes = document.querySelectorAll('.sticky-note');
+
+            for (const existingNote of notes) {
+                if (existingNote !== note) {
+                    const existingRect = existingNote.getBoundingClientRect();
+                    if (!(noteRect.right < existingRect.left || 
+                          noteRect.left > existingRect.right || 
+                          noteRect.bottom < existingRect.top || 
+                          noteRect.top > existingRect.bottom)) {
+                        return true; // Overlap detected
+                    }
+                }
             }
-            return color;
+            return false; // No overlap
         }
 
         let dragNote = null;
