@@ -120,7 +120,7 @@
             font-size: 0.9em; /* Make it 25% smaller */
         }
         #clearComments {
-            margin-top: 20px; /* Ensure there's space for comments */
+            margin-top: 40px; /* Increased margin-top for bottom placement */
             padding: 10px;
             border: 2px solid black;
             background-color: white;
@@ -133,10 +133,6 @@
         }
         #clearComments:hover {
             background-color: #f0f0f0;
-        }
-        #commentCount {
-            font-weight: bold;
-            margin-bottom: 10px; /* Space below comment count */
         }
     </style>
 </head>
@@ -168,9 +164,8 @@
         </div>
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
-        <div id="commentCount">Comments: 0</div> <!-- Comment count display -->
         <div class="comments-section" id="commentsSection">
-            <h2>Comments</h2>
+            <h2>Comments:</h2> <!-- Combined with comment count -->
         </div>
         <button id="clearComments">Clear All Comments</button>
     </div>
@@ -264,12 +259,14 @@
             // Save to Firebase
             commentsRef.push({ from, message }).then(() => {
                 console.log("Message saved successfully!");
+                // Update comment count
+                updateCommentCount();
             }).catch((error) => {
                 console.error("Error saving message to Firebase:", error);
             });
 
             messageInput.value = "";
-            fromInput.value = "";
+            fromInput.value = from; // Retain the 'from' field value
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
@@ -304,7 +301,6 @@
             comment.appendChild(deleteButton);
 
             document.getElementById("commentsSection").appendChild(comment);
-            updateCommentCount(); // Update the comment count after adding a comment
         }
 
         function deleteComment(commentId) {
@@ -315,6 +311,7 @@
                 commentsRef.child(commentId).remove() // Remove specific comment from Firebase
                     .then(() => {
                         console.log("Comment deleted successfully!");
+                        updateCommentCount(); // Update count after deletion
                     })
                     .catch((error) => {
                         console.error("Error deleting comment:", error);
@@ -332,7 +329,7 @@
             if (password === correctPassword) {
                 commentsRef.remove() // Remove all comments from Firebase
                     .then(() => {
-                        document.getElementById("commentsSection").innerHTML = "<h2>Comments</h2>"; // Clear displayed comments
+                        document.getElementById("commentsSection").innerHTML = "<h2>Comments:</h2>"; // Clear displayed comments
                         updateCommentCount(); // Update the comment count after clearing
                         console.log("All comments cleared successfully!");
                     })
@@ -348,7 +345,7 @@
         function updateCommentCount() {
             commentsRef.once("value", (snapshot) => {
                 const commentCount = snapshot.numChildren(); // Get the number of child comments
-                document.getElementById("commentCount").textContent = `Comments: ${commentCount}`; // Update the comment count display
+                document.querySelector("#commentsSection h2").textContent = `Comments: ${commentCount}`; // Update the comment count display
             });
         }
     </script>
