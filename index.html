@@ -126,6 +126,7 @@
         .comment-time {
             font-size: 0.8em; /* Smaller font for timestamp */
             color: lightgrey; /* Light grey for better visibility */
+            margin-bottom: 5px; /* Add some space below */
         }
         .delete-button {
             color: red;
@@ -271,7 +272,7 @@
             }
 
             // Save to Firebase with timestamp
-            const timestamp = new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', month: 'numeric', day: 'numeric', year: 'numeric' }); // Format without seconds
+            const timestamp = new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', month: 'numeric', day: 'numeric', year: '2-digit' }); // Format without seconds
             commentsRef.push({ from, message, timestamp }).then(() => {
                 console.log("Message saved successfully!");
                 document.getElementById("commentsSeparator").style.display = "block"; // Show separator
