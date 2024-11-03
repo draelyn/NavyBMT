@@ -165,7 +165,7 @@
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
         <div class="comments-section" id="commentsSection">
-            <h2>Comments:</h2> <!-- Combined with comment count -->
+            <h2>Comments: <span id="commentCount">0</span></h2> <!-- Combined with comment count -->
         </div>
         <button id="clearComments">Clear All Comments</button>
     </div>
@@ -259,8 +259,7 @@
             // Save to Firebase
             commentsRef.push({ from, message }).then(() => {
                 console.log("Message saved successfully!");
-                // Update comment count
-                updateCommentCount();
+                updateCommentCount(); // Update the comment count after adding a comment
             }).catch((error) => {
                 console.error("Error saving message to Firebase:", error);
             });
