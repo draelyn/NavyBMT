@@ -1,4 +1,5 @@
-// Countdown Timer Script
+console.log("Script loaded successfully!");
+
 function countdownTimer() {
     const targetDate = new Date("January 21, 2025 00:00:00").getTime();
     
