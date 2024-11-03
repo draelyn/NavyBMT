@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Shifty Notes Regular', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
         }
@@ -21,14 +21,8 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        #formContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
         #fromInput, #messageInput {
+            margin-top: 10px;
             padding: 10px;
             font-size: 16px;
             width: 300px;
@@ -37,6 +31,7 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
         }
         #charCounter {
             font-size: 14px;
@@ -48,24 +43,27 @@
             margin-top: 5px;
         }
         .sticky-note {
+            font-family: 'Shifty Notes Regular', Arial, sans-serif;
             background-size: cover;
             background-position: center;
+            color: black;
             padding: 10px;
             cursor: move;
             position: absolute;
             user-select: none;
-            color: black;
-            min-height: 100px; /* Minimum height */
-            min-width: 100px; /* Minimum width */
+            min-width: 150px;
+            min-height: 150px;
             word-wrap: break-word;
             display: flex;
             flex-direction: column;
+            justify-content: flex-start;
             align-items: flex-start;
-            justify-content: center;
-            text-align: left;
-            overflow: hidden; /* Hide overflow */
+            text-align: center;
+            aspect-ratio: 1;
         }
-        .from-text {
+        .sticky-note .from-label {
+            font-size: 14px;
+            margin-bottom: 5px;
             font-weight: bold;
         }
     </style>
@@ -73,24 +71,21 @@
 <body>
     <h1>Draelyn's Navy Graduation Countdown</h1>
     <div id="countdown">Loading...</div>
-
-    <div id="formContainer">
-        <input type="text" id="fromInput" placeholder="From: (optional)">
-        <input type="text" id="messageInput" placeholder="Type your message here">
-        <button id="postButton">Post Message</button>
-        <div id="charCounter">0/150</div> <!-- Character counter -->
-        <div id="charLimitMessage"></div> <!-- Message for character limit -->
-    </div>
+    <input type="text" id="fromInput" placeholder="From: (optional)">
+    <input type="text" id="messageInput" placeholder="Type your message here">
+    <button id="postButton">Post Message</button>
+    <div id="charCounter">0/150</div>
+    <div id="charLimitMessage"></div>
 
     <script>
         // Array of background images
         const backgroundImages = [
-            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for_free_simple_colorful_6860147_6.png?ex=6728701e&is=67271e9e&hm=34e981a461ec2564df0701f32f36c00443d5996fbc6188015b9ca3da4c1a4050&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for_free_simple_colorful_6860147_7.png?ex=67287047&is=67271ec7&hm=def3c3c54105ef2811c2ca0898c7c4f40bc9db269551b1f29cb948b84affe168&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for_free_simple_colorful_6860147_8.png?ex=6728706a&is=67271eea&hm=d0252a3d828db119444847a593e02346a1d8e4cf268a2567e89327c6d2326d70&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png?ex=67286fdb&is=67271e5b&hm=0ca66ef71ca72ccafb7ac4cf3e430f61d7d7281eb2809f228779ae411877f18a&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for_free_simple_colorful_6860147_6.png',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for_free_simple_colorful_6860147_7.png',
+            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for_free_simple_colorful_6860147_8.png',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png'
         ];
 
         // Countdown Timer Script
@@ -115,9 +110,9 @@
         }
         countdown();
 
-        // Character count logic
-        const messageInput = document.getElementById("messageInput");
+        // Character limit and message posting logic
         const fromInput = document.getElementById("fromInput");
+        const messageInput = document.getElementById("messageInput");
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
 
@@ -132,10 +127,11 @@
             }
         });
 
-        // Posting message
-        document.getElementById("postButton").addEventListener("click", () => {
-            const from = fromInput.value;
+        document.getElementById("postButton").addEventListener("click", postMessage);
+
+        function postMessage() {
             const message = messageInput.value;
+            const fromText = fromInput.value;
 
             if (message.length > 150) {
                 charLimitMessage.textContent = "Message cannot exceed 150 characters.";
@@ -143,36 +139,36 @@
             }
 
             if (message.trim() !== "") {
-                createStickyNote(from, message);
+                createStickyNote(fromText, message);
                 messageInput.value = ""; // Clear message input after posting
-                charCounter.textContent = "0/150"; // Reset character counter
+                charCounter.textContent = "0/150"; // Reset counter
             }
-        });
+        }
 
-        // Create sticky note function
-        function createStickyNote(from, message) {
+        function createStickyNote(fromText, message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
+            
+            // Set a random background image
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
 
-            // Add "From:" field
-            const fromText = document.createElement("div");
-            fromText.className = "from-text";
-            fromText.textContent = from ? `From: ${from}` : "";
-            note.appendChild(fromText);
+            // Add from label if available
+            if (fromText.trim()) {
+                const fromLabel = document.createElement("div");
+                fromLabel.className = "from-label";
+                fromLabel.textContent = `From: ${fromText}`;
+                note.appendChild(fromLabel);
+            }
 
             // Add message text
-            const messageText = document.createTextNode(message);
+            const messageText = document.createElement("div");
+            messageText.textContent = message;
             note.appendChild(messageText);
 
-            // Choose a random image based on a number
-            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
-            const randomImage = backgroundImages[randomIndex];
-            note.style.backgroundImage = `url('${randomImage}')`;
-            note.style.backgroundSize = 'contain'; // Adjust image size
-
-            // Set random starting position
-            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
-            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
+            // Set random initial position
+            note.style.left = `${Math.random() * (window.innerWidth - 150)}px`;
+            note.style.top = `${Math.random() * (window.innerHeight - 150)}px`;
 
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
@@ -180,11 +176,11 @@
             document.body.appendChild(note);
         }
 
-        // Drag and drop functionality
         let dragNote = null;
 
         function mouseDown(event) {
             dragNote = event.target;
+            dragNote.style.zIndex = "1000"; // Bring the note to the front while dragging
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
             mouseMove(event); // Update position immediately
@@ -193,12 +189,13 @@
 
         function mouseMove(event) {
             if (dragNote) {
-                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
+                dragNote.style.left = `${event.clientX - dragNote.offsetWidth / 2}px`;
+                dragNote.style.top = `${event.clientY - dragNote.offsetHeight / 2}px`;
             }
         }
 
         function mouseUp() {
+            dragNote.style.zIndex = ""; // Reset z-index after dragging
             dragNote = null;
             document.removeEventListener("mousemove", mouseMove);
             document.removeEventListener("mouseup", mouseUp);
@@ -206,6 +203,7 @@
 
         function touchStart(event) {
             dragNote = event.target;
+            dragNote.style.zIndex = "1000"; // Bring to front on touch
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
             touchMove(event);
@@ -215,16 +213,5 @@
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function touchEnd() {
-            dragNote = null;
-            document.removeEventListener("touchmove", touchMove);
-            document.removeEventListener("touchend", touchEnd);
-        }
-    </script>
-</body>
-</html>
+                dragNote.style.left = `${touch.clientX - dragNote.offsetWidth / 2}px`;
+                dragNote.style.top = `${touch.clientY - dragNote.offsetHeight
