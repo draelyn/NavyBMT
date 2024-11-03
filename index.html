@@ -143,6 +143,13 @@
         const database = firebase.database();
         const commentsRef = database.ref("comments");
 
+        console.log("Firebase initialized successfully!");
+
+        // Test writing to Firebase
+        database.ref("test").set({ hello: "world" })
+            .then(() => console.log("Test write successful!"))
+            .catch((error) => console.error("Test write failed:", error));
+
         // Character Counter
         const messageInput = document.getElementById("messageInput");
         const charCounter = document.getElementById("charCounter");
@@ -173,7 +180,9 @@
             }
 
             // Save to Firebase
-            commentsRef.push({ from, message }).catch((error) => {
+            commentsRef.push({ from, message }).then(() => {
+                console.log("Message saved successfully!");
+            }).catch((error) => {
                 console.error("Error saving message to Firebase:", error);
             });
 
