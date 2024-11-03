@@ -279,16 +279,9 @@
             addComment(commentId, comment.from, comment.message);
         });
 
-        // Add a listener for when a comment is deleted
-        commentsRef.on("child_removed", (snapshot) => {
-            const commentId = snapshot.key; // Get the unique comment ID
-            removeComment(commentId); // Call the function to remove the comment from the UI
-        });
-
         function addComment(commentId, from, message) {
             const comment = document.createElement("div");
             comment.className = "comment";
-            comment.dataset.commentId = commentId; // Add data attribute for easier reference
 
             const fromText = document.createElement("div");
             fromText.className = "comment-from";
@@ -310,17 +303,6 @@
 
             document.getElementById("commentsSection").appendChild(comment);
             updateCommentCount(); // Update count after adding a new comment
-        }
-
-        function removeComment(commentId) {
-            const commentsSection = document.getElementById("commentsSection");
-            const commentToRemove = Array.from(commentsSection.children).find(comment => 
-                comment.dataset.commentId === commentId // Use data attribute to find the comment
-            );
-
-            if (commentToRemove) {
-                commentsSection.removeChild(commentToRemove); // Remove the comment from the DOM
-            }
         }
 
         function deleteComment(commentId) {
