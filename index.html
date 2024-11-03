@@ -21,7 +21,19 @@
             min-height: 100vh;
         }
         h1 {
-            margin-top: 0;
+            margin-top: 0; /* Align to the top */
+        }
+        #clearComments {
+            margin-top: 10px; /* Add space between the title and button */
+            padding: 10px;
+            border: 2px solid black;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #clearComments:hover {
+            background-color: #f0f0f0;
         }
         #countdown {
             display: flex;
@@ -29,6 +41,7 @@
             gap: 15px;
             font-weight: bold;
             font-size: 1.5em;
+            margin-top: 10px; /* Reduced margin-top */
             margin-bottom: 20px;
         }
         .countdown-section {
@@ -49,32 +62,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 10px; /* Reduced margin-top */
         }
         #fromInput, #messageInput {
             padding: 10px;
             font-size: 14px;
             width: 90%;
-            max-width: 300px;
-            margin-bottom: 5px;
+            max-width: 240px;
+            margin-bottom: 4px;
             box-sizing: border-box;
-            border: 2px solid black;
-            border-radius: 4px;
+            border: 2px solid black; /* Black border for input boxes */
+            color: black; /* Black text for input boxes */
+            border-radius: 4px; /* Slightly rounded corners */
         }
         #fromInput {
             width: 70%;
             max-width: 210px;
         }
         #postButton {
-            color: #0066cc;
+            color: #0066cc; /* Blue text */
             background-color: white;
             cursor: pointer;
-            width: 75%;
-            max-width: 180px;
-            padding: 6px;
-            font-size: 16px;
-            border: 2px solid black;
-            border-radius: 8px;
+            width: 75%; /* Set width to 75% of the message input width */
+            max-width: 180px; /* Adjust width for the button */
+            border-radius: 8px; /* Weaker rounding */
+            padding: 6px; /* Shortened height */
+            font-size: 16px; /* Keep the font size */
+            border: 2px solid black; /* Add black border for outline */
         }
         #postButton:hover {
             background-color: #f0f0f0;
@@ -96,11 +110,26 @@
             margin-right: auto;
         }
         .comment {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 2px solid black; /* Black border for comment lines */
             padding: 10px 0;
+            overflow-wrap: break-word; /* Prevent text overflow */
+            word-wrap: break-word; /* Older browsers support */
+            hyphens: auto; /* Allow hyphenation */
+            max-width: 100%; /* Prevent exceeding width */
+            position: relative; /* For positioning the delete button */
         }
         .comment-from {
             font-weight: bold;
+        }
+        .delete-button {
+            color: red;
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 5px; /* Move it up a bit */
+            background: none;
+            border: none;
+            font-size: 0.9em; /* Make it 25% smaller */
         }
     </style>
 </head>
@@ -133,8 +162,10 @@
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
         <div class="comments-section" id="commentsSection">
-            <h2>Comments</h2>
+            <h2>Comments: <span id="commentCount">0</span></h2>
+            <hr id="commentsSeparator" style="display: none;"> <!-- Initially hidden -->
         </div>
+        <button id="clearComments">Clear All Comments</button> <!-- Positioned back to original place -->
     </div>
 
     <!-- Corrected Firebase SDKs for non-module usage -->
@@ -148,20 +179,20 @@
             authDomain: "comments-469e0.firebaseapp.com",
             databaseURL: "https://comments-469e0-default-rtdb.firebaseio.com",
             projectId: "comments-469e0",
-            storageBucket: "comments-469e0.appspot.com",
+            storageBucket: "comments-469e0",
             messagingSenderId: "86029666416",
             appId: "1:86029666416:web:f6d18cbdbef237981eccb5",
             measurementId: "G-H9YHQD5KDE"
         };
 
-        // Correctly initialize Firebase
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const commentsRef = database.ref("comments");
 
         console.log("Firebase initialized successfully!");
 
-        // Countdown Timer (Reverted)
+        // Countdown Timer
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
             setInterval(function() {
@@ -171,14 +202,16 @@
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                const seconds = Math.floor((timeLeft % 1000) / 1000); // Get seconds correctly
 
                 document.getElementById("days").textContent = days < 10 ? "0" + days : days;
                 document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
                 document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
                 document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
 
+                // If the countdown reaches zero
                 if (timeLeft <= 0) {
+                    clearInterval(); // Stop the countdown
                     document.getElementById("days").textContent = "00";
                     document.getElementById("hours").textContent = "00";
                     document.getElementById("minutes").textContent = "00";
@@ -217,20 +250,22 @@
                 return;
             }
 
-            // If the 'from' field is empty, use "anon"
+            // If the 'from' field is empty, set it to "anon"
             if (from === "") {
-                from = "anon";
+                from = "anon"; // Default to "anon" if no name is provided
             }
 
             // Save to Firebase
             commentsRef.push({ from, message }).then(() => {
                 console.log("Message saved successfully!");
+                document.getElementById("commentsSeparator").style.display = "block"; // Show separator
+                updateCommentCount(); // Update the comment count after adding a comment
             }).catch((error) => {
                 console.error("Error saving message to Firebase:", error);
             });
 
             messageInput.value = "";
-            fromInput.value = "";
+            fromInput.value = ""; // Clear 'from' field after sending
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
@@ -238,23 +273,80 @@
         // Load Comments from Firebase
         commentsRef.on("child_added", (snapshot) => {
             const comment = snapshot.val();
-            addComment(comment.from, comment.message);
+            const commentId = snapshot.key; // Get the unique comment ID
+            addComment(commentId, comment.from, comment.message);
         });
 
-        function addComment(from, message) {
+        function addComment(commentId, from, message) {
             const comment = document.createElement("div");
             comment.className = "comment";
 
             const fromText = document.createElement("div");
             fromText.className = "comment-from";
-            fromText.textContent = `From: ${from}`;
+            fromText.textContent = `From: ${from}`; // Space added back
             comment.appendChild(fromText);
 
             const messageText = document.createElement("div");
             messageText.textContent = message;
             comment.appendChild(messageText);
 
+            // Create delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-button";
+            deleteButton.textContent = "✖"; // Red X
+            deleteButton.onclick = function() {
+                deleteComment(commentId);
+            };
+            comment.appendChild(deleteButton);
+
             document.getElementById("commentsSection").appendChild(comment);
+            updateCommentCount(); // Update count after adding a new comment
+        }
+
+        function deleteComment(commentId) {
+            const password = prompt("Please enter the password to delete this comment:");
+            const correctPassword = atob("SmJ4bDQ0"); // Decoded password
+
+            if (password === correctPassword) {
+                commentsRef.child(commentId).remove() // Remove specific comment from Firebase
+                    .then(() => {
+                        console.log("Comment deleted successfully!");
+                        updateCommentCount(); // Update count after deletion
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting comment:", error);
+                    });
+            } else {
+                alert("Incorrect password. Comment will not be deleted.");
+            }
+        }
+
+        // Clear Comments Functionality with Password Protection
+        document.getElementById("clearComments").addEventListener("click", () => {
+            const password = prompt("Please enter the password to clear all comments:");
+            const correctPassword = atob("SmJ4bDQ0"); // Using Base64 to obfuscate the password
+
+            if (password === correctPassword) {
+                commentsRef.remove() // Remove all comments from Firebase
+                    .then(() => {
+                        document.getElementById("commentsSection").innerHTML = "<h2>Comments:</h2><hr>"; // Clear displayed comments and hide the separator
+                        updateCommentCount(); // Update the comment count after clearing
+                        console.log("All comments cleared successfully!");
+                    })
+                    .catch((error) => {
+                        console.error("Error clearing comments:", error);
+                    });
+            } else {
+                alert("Incorrect password. Comments will not be cleared.");
+            }
+        });
+
+        // Update comment count display
+        function updateCommentCount() {
+            commentsRef.once("value", (snapshot) => {
+                const commentCount = snapshot.numChildren(); // Get the number of child comments
+                document.querySelector("#commentCount").textContent = commentCount; // Update the comment count display
+            });
         }
     </script>
 </body>
