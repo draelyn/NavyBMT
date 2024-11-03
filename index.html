@@ -6,41 +6,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown Timer</title>
     <style>
-        #countdown {
-            font-size: 24px;
-            font-weight: bold;
+        body {
+            font-family: Arial, sans-serif;
             text-align: center;
+            margin-top: 50px;
+        }
+        #countdown {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #messageBoard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
             margin-top: 20px;
+            border: 2px solid black;
+            padding: 20px;
+            min-height: 200px;
+        }
+        .sticky-note {
+            background-color: #ffeb3b;
+            padding: 10px;
+            border: 1px solid black;
+            cursor: move;
+            position: absolute;
+        }
+        #messageInput {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #postButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+    <h1>Draelyn's Navy Graduation Countdown</h1>
     <div id="countdown">Loading...</div>
+    <input type="text" id="messageInput" placeholder="Type your message here">
+    <button id="postButton">Post Message</button>
+    <div id="messageBoard"></div>
+
     <script>
+        // Countdown Timer Script
         function countdown() {
-            // Set the target date and time in CDT
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
             setInterval(function() {
                 const now = new Date().getTime();
                 const timeLeft = targetDate - now;
 
-                // Time calculations for days, hours, minutes, and seconds
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                // Display the result in the element with id="countdown"
                 document.getElementById("countdown").innerHTML = 
                     `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
 
-                // If the countdown is over, display a message
                 if (timeLeft < 0) {
-                    document.getElementById("countdown").innerHTML = "The time has arrived!";
+                    document.getElementById("countdown").innerHTML = "The day has arrived!";
                 }
             }, 1000);
         }
         countdown();
+
+        // Sticky Notes Functionality
+        document.getElementById("postButton").addEventListener("click", function() {
+            const message = document.getElementById("messageInput").value;
+            if (message.trim() !== "") {
+                createStickyNote(message);
+                document.getElementById("messageInput").value = "";
+            }
+        });
+
+        function createStickyNote(message) {
+            const note = document.createElement("div");
+            note.className = "sticky-note";
+            note.textContent = message;
+
+            // Make the note draggable
+            note.style.left = Math.random() * 500 + "px"; // Random starting position
+            note.style.top = Math.random() * 200 + "px"; // Random starting position
+            note.draggable = true;
+
+            note.addEventListener("dragstart", dragStart);
+            note.addEventListener("dragend", dragEnd);
+
+            document.getElementById("messageBoard").appendChild(note);
+        }
+
+        let dragNote = null;
+        function dragStart(event) {
+            dragNote = event.target;
+            event.dataTransfer.setData("text/plain", "");
+        }
+
+        function dragEnd(event) {
+            const x = event.clientX;
+            const y = event.clientY;
+            dragNote.style.left = `${x}px`;
+            dragNote.style.top = `${y}px`;
+            dragNote = null;
+        }
     </script>
 </body>
 </html>
