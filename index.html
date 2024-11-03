@@ -53,7 +53,7 @@
             font-size: 14px;
             width: 90%;
             max-width: 300px;
-            margin-bottom: 4px; /* Reduced margin for closer spacing */
+            margin-bottom: 4px;
             box-sizing: border-box;
         }
         #fromInput {
@@ -63,9 +63,10 @@
         #postButton {
             border-radius: 8px; /* Rounded corners */
             color: #0066cc; /* Blue text */
-            border: 1px solid #0066cc; /* Blue border */
+            border: 1px solid black; /* Black border */
             background-color: white; /* White background */
             cursor: pointer;
+            width: 72%; /* Reduced width to make it shorter */
         }
         #postButton:hover {
             background-color: #f0f0f0; /* Light grey background on hover */
@@ -151,6 +152,25 @@
         const commentsRef = database.ref("comments");
 
         console.log("Firebase initialized successfully!");
+
+        // Countdown Timer
+        function countdown() {
+            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
+            setInterval(function() {
+                const now = new Date().getTime();
+                const timeLeft = targetDate - now;
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000)) / 1000);
+
+                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+            }, 1000);
+        }
+        countdown();
 
         // Character Counter
         const messageInput = document.getElementById("messageInput");
