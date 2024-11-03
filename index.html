@@ -2,18 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown Timer</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        #countdown {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Timer Section -->
-        <div class="timer">
-            <p class="timer-text">Countdown to January 21, 2025:</p>
-            <p class="countdown" id="countdown">Loading...</p>
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <div id="countdown">Loading...</div>
+    <script>
+        function countdown() {
+            // Set the target date and time in CDT
+            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
+            setInterval(function() {
+                const now = new Date().getTime();
+                const timeLeft = targetDate - now;
+
+                // Time calculations for days, hours, minutes, and seconds
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // Display the result in the element with id="countdown"
+                document.getElementById("countdown").innerHTML = 
+                    `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
+
+                // If the countdown is over, display a message
+                if (timeLeft < 0) {
+                    document.getElementById("countdown").innerHTML = "The time has arrived!";
+                }
+            }, 1000);
+        }
+        countdown();
+    </script>
 </body>
 </html>
