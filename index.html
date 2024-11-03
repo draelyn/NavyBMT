@@ -49,7 +49,14 @@
             align-items: center;
             margin-top: 20px;
         }
-        #fromInput, #messageInput {
+        #fromInput {
+            padding: 5px; /* Make the input smaller */
+            font-size: 12px; /* Reduce font size */
+            width: 80%;
+            max-width: 250px;
+            margin-bottom: 10px;
+        }
+        #messageInput {
             padding: 10px;
             font-size: 14px;
             width: 90%;
@@ -110,9 +117,9 @@
             </div>
         </div>
         <div id="input-container">
-            <input type="text" id="fromInput" placeholder="From: (optional)">
+            <input type="text" id="fromInput" placeholder="From: Anonymous">
             <input type="text" id="messageInput" placeholder="Type your message here">
-            <button id="postButton">Post Message</button>
+            <button id="postButton">Post Comment</button>
         </div>
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
@@ -172,11 +179,16 @@
 
         postButton.addEventListener("click", () => {
             const message = messageInput.value.trim();
-            const from = fromInput.value.trim();
+            let from = fromInput.value.trim();
 
             if (message.length === 0 || message.length > 150) {
                 charLimitMessage.textContent = "Please enter a message within the character limit.";
                 return;
+            }
+
+            // If the 'from' field is empty, use "anon"
+            if (from === "") {
+                from = "anon";
             }
 
             // Save to Firebase
@@ -202,12 +214,10 @@
             const comment = document.createElement("div");
             comment.className = "comment";
 
-            if (from) {
-                const fromText = document.createElement("div");
-                fromText.className = "comment-from";
-                fromText.textContent = `From: ${from}`;
-                comment.appendChild(fromText);
-            }
+            const fromText = document.createElement("div");
+            fromText.className = "comment-from";
+            fromText.textContent = `From: ${from}`;
+            comment.appendChild(fromText);
 
             const messageText = document.createElement("div");
             messageText.textContent = message;
