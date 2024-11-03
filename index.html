@@ -161,6 +161,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyDZk3mpp9g-nW1kwOvfIj6J247kHpgLTnU",
             authDomain: "comments-469e0.firebaseapp.com",
+            databaseURL: "https://comments-469e0-default-rtdb.firebaseio.com", // Make sure to use the correct URL
             projectId: "comments-469e0",
             storageBucket: "comments-469e0.appspot.com",
             messagingSenderId: "86029666416",
@@ -169,7 +170,7 @@
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const commentsRef = database.ref("comments");
 
