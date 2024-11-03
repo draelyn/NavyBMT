@@ -27,15 +27,15 @@
             color: black;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            overflow: hidden; /* Hide overflow to keep fixed dimensions */
         }
 
         .container {
-            max-width: 600px; /* Set max-width to 600px to mimic mobile layout */
+            width: 375px; /* Fixed width, same as many mobile devices */
+            height: 667px; /* Fixed height, typical for mobile screens */
             margin: 0 auto;
-            padding: 20px;
             position: relative;
-            min-height: 100vh;
+            border: 1px solid #ddd; /* Optional border for debugging layout */
         }
 
         h1 {
@@ -46,9 +46,9 @@
         #countdown {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             font-weight: bold;
-            font-size: 1.5em;
+            font-size: 1.2em;
             margin-bottom: 20px;
         }
 
@@ -58,13 +58,13 @@
         }
 
         .countdown-number {
-            font-size: 2.5em;
+            font-size: 2em;
             color: white;
             text-shadow: 2px 2px 5px black;
         }
 
         .countdown-label {
-            font-size: 0.8em;
+            font-size: 0.7em;
             text-transform: uppercase;
             margin-top: -5px;
         }
@@ -79,8 +79,7 @@
         #fromInput, #messageInput {
             padding: 10px;
             font-size: 14px;
-            width: 90%; /* Make inputs responsive */
-            max-width: none;
+            width: 80%; /* Make inputs fit within the fixed container */
             margin-bottom: 10px;
         }
 
@@ -88,8 +87,7 @@
             padding: 10px 20px;
             font-size: 14px;
             cursor: pointer;
-            width: 90%; /* Make button responsive */
-            max-width: none;
+            width: 80%;
         }
 
         #charCounter {
@@ -124,26 +122,6 @@
         .from-text {
             font-weight: bold;
             margin-bottom: 5px;
-        }
-
-        /* Ensure consistent look across devices */
-        @media (max-width: 600px) {
-            #countdown {
-                gap: 10px;
-                font-size: 1.2em;
-            }
-
-            .countdown-number {
-                font-size: 2em;
-            }
-
-            .countdown-label {
-                font-size: 0.7em;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
         }
     </style>
 </head>
@@ -265,15 +243,15 @@
             const randomIndex = Math.floor(Math.random() * backgroundImages.length);
             note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
 
-            // Set random position
-            note.style.left = Math.random() * (window.innerWidth - 150) + "px";
-            note.style.top = Math.random() * (window.innerHeight - 150) + "px";
+            // Set random position within the fixed container
+            note.style.left = Math.random() * (375 - 150) + "px"; // Container width minus note width
+            note.style.top = Math.random() * (667 - 150) + "px"; // Container height minus note height
 
             // Make the note draggable
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
 
-            document.body.appendChild(note);
+            document.querySelector(".container").appendChild(note);
         }
 
         let dragNote = null;
