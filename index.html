@@ -112,10 +112,13 @@
         }
 
         function isOverlapping(x, y, note) {
-            const titleArea = { left: 0, right: window.innerWidth, top: 0, bottom: 50 };
-            const countdownArea = { left: 0, right: window.innerWidth, top: 50, bottom: 100 };
-            const inputArea = { left: 0, right: window.innerWidth / 2, top: 100, bottom: 150 };
-            const buttonArea = { left: window.innerWidth / 2, right: window.innerWidth, top: 100, bottom: 150 };
+            // Define the boundaries for the protected area (based on screenshot)
+            const protectedArea = {
+                left: window.innerWidth / 2 - 150,  // Adjust width as necessary
+                right: window.innerWidth / 2 + 150,
+                top: 50,
+                bottom: 250,
+            };
 
             const noteBounds = {
                 left: x,
@@ -124,17 +127,14 @@
                 bottom: y + note.clientHeight,
             };
 
-            const areas = [titleArea, countdownArea, inputArea, buttonArea];
-
-            for (const area of areas) {
-                if (
-                    noteBounds.right > area.left &&
-                    noteBounds.left < area.right &&
-                    noteBounds.bottom > area.top &&
-                    noteBounds.top < area.bottom
-                ) {
-                    return true;
-                }
+            // Check if note overlaps the protected area
+            if (
+                noteBounds.right > protectedArea.left &&
+                noteBounds.left < protectedArea.right &&
+                noteBounds.bottom > protectedArea.top &&
+                noteBounds.top < protectedArea.bottom
+            ) {
+                return true;
             }
             return false;
         }
