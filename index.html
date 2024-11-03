@@ -26,16 +26,18 @@
             position: absolute;
             user-select: none;
             color: black;
-            width: 150px; /* Fixed width to maintain aspect ratio */
-            max-width: 150px;
+            width: 150px; /* Fixed width */
+            height: 150px; /* Fixed height */
             min-height: 100px; /* Minimum height */
+            min-width: 100px; /* Minimum width */
             word-wrap: break-word;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            height: auto; /* Allow height to grow based on content */
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            resize: both; /* Allows resizing */
+            overflow: hidden; /* Hide overflow */
         }
         #messageInput {
             margin-top: 20px;
@@ -106,6 +108,20 @@
             note.addEventListener("touchstart", touchStart);
 
             document.body.appendChild(note);
+            adjustNoteSize(note);
+        }
+
+        function adjustNoteSize(note) {
+            const baseWidth = 150; // Base width
+            const baseHeight = 150; // Base height
+            const textHeight = note.scrollHeight; // Height of the text
+
+            // Adjust the note's height while maintaining the aspect ratio
+            if (textHeight > baseHeight) {
+                const scaleFactor = textHeight / baseHeight;
+                note.style.width = `${baseWidth * scaleFactor}px`;
+                note.style.height = `${baseHeight * scaleFactor}px`;
+            }
         }
 
         let dragNote = null;
