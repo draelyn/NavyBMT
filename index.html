@@ -127,24 +127,20 @@
             }
 
             if (message.trim() !== "") {
-                createStickyNote(message);
+                const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
+                createStickyNote(message, randomIndex); // Pass the random number to createStickyNote
                 messageInput.value = ""; // Clear input after posting
                 charCounter.textContent = "0/200"; // Reset counter
             }
         }
 
-        function createStickyNote(message) {
+        function createStickyNote(message, randomIndex) {
             const note = document.createElement("div");
             note.className = "sticky-note";
             note.textContent = message;
 
-            // Set a random background image from the array
-            const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
-            note.style.backgroundImage = `url('${randomImage}')`;
-
-            // Set a random background color
-            const randomColor = getRandomColor();
-            note.style.backgroundColor = randomColor;
+            // Set the background image based on the random index (adjust for zero-based index)
+            note.style.backgroundImage = `url('${backgroundImages[randomIndex - 1]}')`; // Use randomIndex - 1
 
             // Set random starting position
             note.style.left = Math.random() * (window.innerWidth - 100) + "px";
@@ -154,29 +150,6 @@
             note.addEventListener("touchstart", touchStart);
 
             document.body.appendChild(note);
-            adjustNoteSize(note);
-        }
-
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        function adjustNoteSize(note) {
-            const baseWidth = 150; // Base width
-            const baseHeight = 150; // Base height
-            const textHeight = note.scrollHeight; // Height of the text
-
-            // Adjust the note's height while maintaining the aspect ratio
-            if (textHeight > baseHeight) {
-                const scaleFactor = textHeight / baseHeight;
-                note.style.width = `${baseWidth * scaleFactor}px`;
-                note.style.height = `${baseHeight * scaleFactor}px`;
-            }
         }
 
         let dragNote = null;
