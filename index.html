@@ -80,14 +80,58 @@
             note.className = "sticky-note";
             note.textContent = message;
 
-            // Random starting position
-            note.style.left = Math.random() * 500 + "px"; 
-            note.style.top = Math.random() * 200 + "px"; 
+            // Generate a random position and ensure it doesn't overlap with specified areas
+            let position = getRandomPosition(note);
+            note.style.left = position.x + "px"; 
+            note.style.top = position.y + "px"; 
 
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
 
             document.body.appendChild(note); // Append directly to body
+        }
+
+        function getRandomPosition(note) {
+            const minX = 0;
+            const minY = 200; // Position below the countdown area
+            const maxX = window.innerWidth - note.clientWidth; // Ensure it doesn't go off the right edge
+            const maxY = window.innerHeight - note.clientHeight - 150; // Leave space for other elements
+
+            let x, y;
+            do {
+                x = Math.random() * maxX;
+                y = Math.random() * maxY;
+            } while (isOverlapping(x, y, note));
+
+            return { x, y };
+        }
+
+        function isOverlapping(x, y, note) {
+            const titleArea = { left: 0, right: window.innerWidth, top: 0, bottom: 50 }; // Title area
+            const countdownArea = { left: 0, right: window.innerWidth, top: 50, bottom: 100 }; // Countdown area
+            const inputArea = { left: 0, right: window.innerWidth / 2, top: 100, bottom: 150 }; // Input box area
+            const buttonArea = { left: window.innerWidth / 2, right: window.innerWidth, top: 100, bottom: 150 }; // Button area
+
+            const noteBounds = {
+                left: x,
+                right: x + note.clientWidth,
+                top: y,
+                bottom: y + note.clientHeight,
+            };
+
+            const areas = [titleArea, countdownArea, inputArea, buttonArea];
+
+            for (const area of areas) {
+                if (
+                    noteBounds.right > area.left &&
+                    noteBounds.left < area.right &&
+                    noteBounds.bottom > area.top &&
+                    noteBounds.top < area.bottom
+                ) {
+                    return true; // There's an overlap
+                }
+            }
+            return false; // No overlap
         }
 
         let dragNote = null;
@@ -102,7 +146,6 @@
 
         function mouseMove(event) {
             if (dragNote) {
-                // Directly set the sticky note's position to the mouse coordinates
                 dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
                 dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
             }
@@ -126,7 +169,6 @@
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                // Directly set the sticky note's position to the touch coordinates
                 dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
                 dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
             }
