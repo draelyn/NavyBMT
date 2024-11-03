@@ -152,7 +152,7 @@
                 createStickyNote(from, message); // Pass the "from" and message to createStickyNote
                 messageInput.value = ""; // Clear input after posting
                 charCounter.textContent = "0/200"; // Reset counter
-                fromInput.value = ""; // Clear the "From:" input
+                // Don't clear the "From:" input if it has a value
             }
         }
 
