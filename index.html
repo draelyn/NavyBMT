@@ -41,12 +41,18 @@
             margin-top: 20px;
             padding: 10px;
             font-size: 16px;
+            width: 300px;
         }
         #postButton {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
+        }
+        #charCounter {
+            font-size: 14px;
+            color: grey;
+            margin-top: 5px;
         }
         #charLimitMessage {
             color: red; /* Red color for error message */
@@ -59,6 +65,7 @@
     <div id="countdown">Loading...</div>
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
+    <div id="charCounter">0/200</div> <!-- Character counter -->
     <div id="charLimitMessage"></div> <!-- Message for character limit -->
 
     <script>
@@ -86,25 +93,34 @@
 
         // Sticky Notes Functionality
         document.getElementById("postButton").addEventListener("click", postMessage);
-        document.getElementById("messageInput").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") postMessage();
+        const messageInput = document.getElementById("messageInput");
+        const charCounter = document.getElementById("charCounter");
+        const charLimitMessage = document.getElementById("charLimitMessage");
+
+        // Update character count as the user types
+        messageInput.addEventListener("input", () => {
+            const currentLength = messageInput.value.length;
+            charCounter.textContent = `${currentLength}/200`;
+
+            if (currentLength > 200) {
+                charLimitMessage.textContent = "Message cannot exceed 200 characters.";
+            } else {
+                charLimitMessage.textContent = ""; // Clear message if within limit
+            }
         });
 
         function postMessage() {
-            const messageInput = document.getElementById("messageInput");
             const message = messageInput.value;
-            const charLimitMessage = document.getElementById("charLimitMessage");
 
             if (message.length > 200) {
                 charLimitMessage.textContent = "Message cannot exceed 200 characters.";
                 return; // Stop the function if message is too long
-            } else {
-                charLimitMessage.textContent = ""; // Clear the message if within limit
             }
 
             if (message.trim() !== "") {
                 createStickyNote(message);
                 messageInput.value = ""; // Clear input after posting
+                charCounter.textContent = "0/200"; // Reset counter
             }
         }
 
