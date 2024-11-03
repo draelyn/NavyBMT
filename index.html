@@ -24,7 +24,8 @@
             position: absolute;
             user-select: none;
             color: black;
-            max-width: 200px; /* Max width */
+            width: 150px; /* Fixed width */
+            height: 150px; /* Fixed height */
             min-height: 100px; /* Minimum height */
             min-width: 100px; /* Minimum width */
             word-wrap: break-word;
@@ -68,14 +69,13 @@
 
     <script>
         // Array of background images
-        const stickyNoteImages = [
-            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for-free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for-free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for-free_simple_colorful_6860147_6.png?ex=6728701e&is=67271e9e&hm=34e981a461ec2564df0701f32f36c00443d5996fbc6188015b9ca3da4c1a4050&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for-free_simple_colorful_6860147_7.png?ex=67287047&is=67271ec7&hm=def3c3c54105ef2811c2ca0898c7c4f40bc9db269551b1f29cb948b84affe168&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for-free_simple_colorful_6860147_8.png?ex=6728706a&is=67271eea&hm=d0252a3d828db119444847a593e02346a1d8e4cf268a2567e89327c6d2326d70&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for-free_simple_colorful_6860147_5.png?ex=67286fdb&is=67271e5b&hm=0ca66ef71ca72ccafb7ac4cf3e430f61d7d7281eb2809f228779ae411877f18a&=&format=webp&quality=lossless',
-            // Add more image URLs here
+        const backgroundImages = [
+            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for_free_simple_colorful_6860147_6.png?ex=6728701e&is=67271e9e&hm=34e981a461ec2564df0701f32f36c00443d5996fbc6188015b9ca3da4c1a4050&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for_free_simple_colorful_6860147_7.png?ex=67287047&is=67271ec7&hm=def3c3c54105ef2811c2ca0898c7c4f40bc9db269551b1f29cb948b84affe168&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for_free_simple_colorful_6860147_8.png?ex=6728706a&is=67271eea&hm=d0252a3d828db119444847a593e02346a1d8e4cf268a2567e89327c6d2326d70&=&format=webp&quality=lossless',
+            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png?ex=67286fdb&is=67271e5b&hm=0ca66ef71ca72ccafb7ac4cf3e430f61d7d7281eb2809f228779ae411877f18a&=&format=webp&quality=lossless',
         ];
 
         // Countdown Timer Script
@@ -139,19 +139,44 @@
             note.textContent = message;
 
             // Set a random background image from the array
-            const randomImage = stickyNoteImages[Math.floor(Math.random() * stickyNoteImages.length)];
+            const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
             note.style.backgroundImage = `url('${randomImage}')`;
 
+            // Set a random background color
+            const randomColor = getRandomColor();
+            note.style.backgroundColor = randomColor;
+
             // Set random starting position
-            const left = Math.random() * (window.innerWidth - 100); // Ensure some padding for small notes
-            const top = Math.random() * (window.innerHeight - 100); // Ensure some padding for small notes
-            note.style.left = `${left}px`;
-            note.style.top = `${top}px`;
+            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
 
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
 
             document.body.appendChild(note);
+            adjustNoteSize(note);
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function adjustNoteSize(note) {
+            const baseWidth = 150; // Base width
+            const baseHeight = 150; // Base height
+            const textHeight = note.scrollHeight; // Height of the text
+
+            // Adjust the note's height while maintaining the aspect ratio
+            if (textHeight > baseHeight) {
+                const scaleFactor = textHeight / baseHeight;
+                note.style.width = `${baseWidth * scaleFactor}px`;
+                note.style.height = `${baseHeight * scaleFactor}px`;
+            }
         }
 
         let dragNote = null;
