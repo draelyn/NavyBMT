@@ -119,6 +119,14 @@
             hyphens: auto; /* Allow hyphenation */
             max-width: 100%; /* Prevent exceeding width */
             position: relative; /* For positioning the delete button */
+            display: flex; /* Use flexbox to align items */
+            flex-direction: column; /* Column layout */
+        }
+        .comment-header {
+            display: flex; /* Flexbox for alignment */
+            justify-content: space-between; /* Space between elements */
+            align-items: center; /* Center vertically */
+            margin-bottom: 5px; /* Space below header */
         }
         .comment-from {
             font-weight: bold;
@@ -126,17 +134,15 @@
         .comment-time {
             font-size: 0.8em; /* Smaller font for timestamp */
             color: lightgrey; /* Light grey for better visibility */
-            margin-bottom: 5px; /* Add some space below */
+            margin-left: auto; /* Align timestamp to the right */
         }
         .delete-button {
             color: red;
             cursor: pointer;
-            position: absolute;
-            right: 10px;
-            top: 5px; /* Move it up a bit */
             background: none;
             border: none;
-            font-size: 0.9em; /* Make it 25% smaller */
+            font-size: 0.9em; /* Make it smaller */
+            margin-left: 10px; /* Space between timestamp and delete button */
         }
     </style>
 </head>
@@ -206,34 +212,34 @@
             fromInput.value = storedFromValue; // Restore the stored value
         }
 
- // Countdown Timer
-    function countdown() {
-        const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
-        const intervalId = setInterval(function() {
-            const now = new Date().getTime();
-            const timeLeft = targetDate - now;
+        // Countdown Timer
+        function countdown() {
+            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
+            setInterval(function() {
+                const now = new Date().getTime();
+                const timeLeft = targetDate - now;
 
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000); // Get seconds correctly
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000)) / 1000); // Get seconds correctly
 
-            document.getElementById("days").textContent = days < 10 ? "0" + days : days;
-            document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
 
-            // If the countdown reaches zero
-            if (timeLeft <= 0) {
-                clearInterval(intervalId); // Stop the countdown
-                document.getElementById("days").textContent = "00";
-                document.getElementById("hours").textContent = "00";
-                document.getElementById("minutes").textContent = "00";
-                document.getElementById("seconds").textContent = "00";
-            }
-        }, 1000);
-    }
-    countdown();
+                // If the countdown reaches zero
+                if (timeLeft <= 0) {
+                    clearInterval(); // Stop the countdown
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                }
+            }, 1000);
+        }
+        countdown();
 
         // Character Counter
         const messageInput = document.getElementById("messageInput");
@@ -308,29 +314,35 @@
             const comment = document.createElement("div");
             comment.className = "comment";
 
-            const fromText = document.createElement("div");
+            const commentHeader = document.createElement("div");
+            commentHeader.className = "comment-header";
+
+            const fromText = document.createElement("span");
             fromText.className = "comment-from";
-            fromText.textContent = `From: ${from}`; // Space added back
-            comment.appendChild(fromText);
+            fromText.textContent = `From: ${from}`;
 
-            const messageText = document.createElement("div");
-            messageText.textContent = message;
-            comment.appendChild(messageText);
-
-            // Create timestamp element
-            const timestampText = document.createElement("div");
+            const timestampText = document.createElement("span");
             timestampText.className = "comment-time";
             timestampText.textContent = timestamp.replace(/,\s*\d{2}:\d{2}$/, ''); // Remove seconds
-            comment.appendChild(timestampText);
 
-            // Create delete button
             const deleteButton = document.createElement("button");
             deleteButton.className = "delete-button";
             deleteButton.textContent = "✖"; // Red X
             deleteButton.onclick = function() {
                 deleteComment(commentId);
             };
-            comment.appendChild(deleteButton);
+
+            // Append header elements
+            commentHeader.appendChild(fromText);
+            commentHeader.appendChild(timestampText);
+            commentHeader.appendChild(deleteButton);
+            comment.appendChild(commentHeader);
+
+            // Comment message
+            const messageText = document.createElement("div");
+            messageText.className = "comment-message";
+            messageText.textContent = message;
+            comment.appendChild(messageText);
 
             document.getElementById("commentsSection").appendChild(comment);
             updateCommentCount(); // Update count after adding a new comment
