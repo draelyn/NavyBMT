@@ -17,7 +17,7 @@
             margin-bottom: 20px;
         }
         .sticky-note {
-            background-image: url('https://media.discordapp.net/attachments/996335523901747203/1302520671070326814/digital-sticky-notes-cute-paper-png.png?ex=67286a67&is=672718e7&hm=8957a2a23bd95f7f535a614d74ded034b8ec61abd7e63e5da4a44e778cde9787&=&format=webp&quality=lossless'); /* Change this to your image URL */
+            background-image: url('https://cdn.discordapp.com/attachments/996335523901747203/1302521813921955881/Pngtreedownload_for_free_simple_colorful_6860147_1.png?ex=67286b78&is=672719f8&hm=cc30df5537d1a20b70f86e3bd98c98893a2264cdd8337da63ee1d97cf53e83d7&'); /* Change this to your image URL */
             background-size: cover; /* Ensure the image covers the note */
             background-position: center; /* Center the image */
             padding: 10px;
@@ -26,11 +26,13 @@
             position: absolute;
             user-select: none;
             color: black; /* Change text color for visibility */
-            min-width: 100px; /* Minimum width */
+            width: auto; /* Width based on content */
             min-height: 50px; /* Minimum height */
             max-width: 200px; /* Limit the maximum width */
             word-wrap: break-word; /* Allows the text to wrap */
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
+            height: auto; /* Allow height to grow based on content */
+            display: inline-block; /* Allow the width and height to adapt to content */
         }
         #messageInput {
             margin-top: 20px;
