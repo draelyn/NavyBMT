@@ -216,7 +216,7 @@
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000); // Get seconds correctly
+                const seconds = Math.floor((timeLeft % (1000)) / 1000); // Get seconds correctly
 
                 document.getElementById("days").textContent = days < 10 ? "0" + days : days;
                 document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
@@ -271,8 +271,19 @@
                 from = "anon"; // Default to "anon" if no name is provided
             }
 
+            // Get current date and time in CDT
+            const now = new Date();
+            const options = {
+                month: 'numeric',
+                day: 'numeric',
+                year: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+            };
+            const timestamp = now.toLocaleString('en-US', options) + ' CDT'; // Format the timestamp
+
             // Save to Firebase with timestamp
-            const timestamp = new Date().toLocaleString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).replace(/:\d{2}$/, ''); // Format without seconds
             commentsRef.push({ from, message, timestamp }).then(() => {
                 console.log("Message saved successfully!");
                 document.getElementById("commentsSeparator").style.display = "block"; // Show separator
@@ -309,7 +320,7 @@
             // Create timestamp element
             const timestampText = document.createElement("div");
             timestampText.className = "comment-time";
-            timestampText.textContent = timestamp; // Display timestamp in local time
+            timestampText.textContent = timestamp.replace(/,\s*\d{2}:\d{2}$/, ''); // Remove seconds
             comment.appendChild(timestampText);
 
             // Create delete button
