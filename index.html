@@ -40,52 +40,55 @@
 
         h1 {
             margin-top: 20px;
-            font-size: 2em;
+            font-size: 1.8em;
         }
 
         #countdown {
             display: flex;
             justify-content: center;
-            gap: 30px; /* Increased gap for better spacing */
+            gap: 15px; /* Reduced gap for better fit */
             font-weight: bold;
-            font-size: 2em; /* Reduced font size for smaller numbers */
+            font-size: 1.5em; /* Smaller font size */
             margin-bottom: 20px;
         }
 
         .countdown-section {
             text-align: center;
-            color: #0066cc; /* Changed to blue color */
+            color: #0066cc;
         }
 
         .countdown-number {
-            font-size: 3em; /* Reduced font size for better fit */
+            font-size: 2.5em; /* Smaller font size */
             color: white;
             text-shadow: 2px 2px 5px black;
         }
 
         .countdown-label {
-            font-size: 0.9em;
+            font-size: 0.8em; /* Smaller font size for labels */
             text-transform: uppercase;
-            margin-top: -5px; /* Adjusted for better alignment */
+            margin-top: -5px;
         }
 
         #fromInput, #messageInput {
             margin-top: 10px;
             padding: 10px;
-            font-size: 16px;
-            width: 80%;
+            font-size: 14px;
+            width: 100%;
             max-width: 300px;
+            margin-bottom: 10px; /* Space between inputs */
         }
 
         #postButton {
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            margin-top: 10px;
+            display: inline-block;
+            width: 100%;
+            max-width: 300px;
         }
 
         #charCounter {
-            font-size: 14px;
+            font-size: 12px;
             color: grey;
             margin-top: 5px;
         }
@@ -120,6 +123,31 @@
         .from-text {
             font-weight: bold;
             margin-bottom: 5px;
+        }
+
+        /* Mobile Styling */
+        @media (max-width: 600px) {
+            #countdown {
+                gap: 10px; /* Even smaller gap on mobile */
+                font-size: 1.2em; /* Smaller countdown font */
+            }
+
+            .countdown-number {
+                font-size: 2em; /* Further reduced size on mobile */
+            }
+
+            .countdown-label {
+                font-size: 0.7em; /* Smaller label size on mobile */
+            }
+
+            h1 {
+                font-size: 1.5em; /* Smaller title on mobile */
+            }
+
+            #fromInput, #messageInput, #postButton {
+                width: 90%; /* Wider inputs and button on mobile */
+                max-width: none; /* Remove max width */
+            }
         }
     </style>
 </head>
