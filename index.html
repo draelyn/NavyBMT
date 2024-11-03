@@ -113,16 +113,13 @@
 
         function mouseMove(event) {
             if (dragNote) {
-                const x = event.clientX - dragNote.clientWidth / 2; // Center the note
-                const y = event.clientY - dragNote.clientHeight / 2;
+                const x = event.clientX - (dragNote.clientWidth / 2); // Center the note
+                const y = event.clientY - (dragNote.clientHeight / 2);
 
                 // Check boundaries and adjust position if necessary
                 if (!isWithinBounds(x, y)) {
-                    // Move it out of bounds slightly
-                    const outOfBoundsX = (x < 0) ? 10 : (x + dragNote.clientWidth > window.innerWidth ? window.innerWidth - dragNote.clientWidth - 10 : x);
-                    const outOfBoundsY = (y < 0) ? 10 : (y + dragNote.clientHeight > window.innerHeight ? window.innerHeight - dragNote.clientHeight - 10 : y);
-                    dragNote.style.left = `${outOfBoundsX}px`;
-                    dragNote.style.top = `${outOfBoundsY}px`;
+                    dragNote.style.left = `${x}px`;
+                    dragNote.style.top = `${y}px`;
                 } else {
                     dragNote.style.left = `${x}px`;
                     dragNote.style.top = `${y}px`;
@@ -131,6 +128,25 @@
         }
 
         function mouseUp() {
+            if (dragNote) {
+                const x = parseFloat(dragNote.style.left);
+                const y = parseFloat(dragNote.style.top);
+
+                // Check if out of bounds and adjust
+                if (!isWithinBounds(x, y)) {
+                    // Move out of bounds slightly
+                    if (x < 0) {
+                        dragNote.style.left = "10px"; // Move to right
+                    } else if (x + dragNote.clientWidth > window.innerWidth) {
+                        dragNote.style.left = `${window.innerWidth - dragNote.clientWidth - 10}px`; // Move to left
+                    }
+                    if (y < 0) {
+                        dragNote.style.top = "10px"; // Move down
+                    } else if (y + dragNote.clientHeight > window.innerHeight) {
+                        dragNote.style.top = `${window.innerHeight - dragNote.clientHeight - 10}px`; // Move up
+                    }
+                }
+            }
             dragNote = null;
             document.removeEventListener("mousemove", mouseMove);
             document.removeEventListener("mouseup", mouseUp);
@@ -147,15 +163,13 @@
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                const x = touch.clientX - dragNote.clientWidth / 2; // Center the note
-                const y = touch.clientY - dragNote.clientHeight / 2;
+                const x = touch.clientX - (dragNote.clientWidth / 2); // Center the note
+                const y = touch.clientY - (dragNote.clientHeight / 2);
 
                 // Check boundaries and adjust position if necessary
                 if (!isWithinBounds(x, y)) {
-                    const outOfBoundsX = (x < 0) ? 10 : (x + dragNote.clientWidth > window.innerWidth ? window.innerWidth - dragNote.clientWidth - 10 : x);
-                    const outOfBoundsY = (y < 0) ? 10 : (y + dragNote.clientHeight > window.innerHeight ? window.innerHeight - dragNote.clientHeight - 10 : y);
-                    dragNote.style.left = `${outOfBoundsX}px`;
-                    dragNote.style.top = `${outOfBoundsY}px`;
+                    dragNote.style.left = `${x}px`;
+                    dragNote.style.top = `${y}px`;
                 } else {
                     dragNote.style.left = `${x}px`;
                     dragNote.style.top = `${y}px`;
@@ -164,6 +178,25 @@
         }
 
         function touchEnd() {
+            if (dragNote) {
+                const x = parseFloat(dragNote.style.left);
+                const y = parseFloat(dragNote.style.top);
+
+                // Check if out of bounds and adjust
+                if (!isWithinBounds(x, y)) {
+                    // Move out of bounds slightly
+                    if (x < 0) {
+                        dragNote.style.left = "10px"; // Move to right
+                    } else if (x + dragNote.clientWidth > window.innerWidth) {
+                        dragNote.style.left = `${window.innerWidth - dragNote.clientWidth - 10}px`; // Move to left
+                    }
+                    if (y < 0) {
+                        dragNote.style.top = "10px"; // Move down
+                    } else if (y + dragNote.clientHeight > window.innerHeight) {
+                        dragNote.style.top = `${window.innerHeight - dragNote.clientHeight - 10}px`; // Move up
+                    }
+                }
+            }
             dragNote = null;
             document.removeEventListener("touchmove", touchMove);
             document.removeEventListener("touchend", touchEnd);
