@@ -194,6 +194,13 @@
 
         console.log("Firebase initialized successfully!");
 
+        // Load persistent fromInput value from local storage
+        const fromInput = document.getElementById("fromInput");
+        const storedFromValue = localStorage.getItem("fromInput");
+        if (storedFromValue) {
+            fromInput.value = storedFromValue; // Restore the stored value
+        }
+
         // Countdown Timer
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
@@ -241,7 +248,6 @@
 
         // Post Message
         const postButton = document.getElementById("postButton");
-        const fromInput = document.getElementById("fromInput");
 
         postButton.addEventListener("click", () => {
             const message = messageInput.value.trim();
@@ -251,6 +257,9 @@
                 charLimitMessage.textContent = "Please enter a message within the character limit.";
                 return;
             }
+
+            // Save the 'from' field to local storage
+            localStorage.setItem("fromInput", from);
 
             // If the 'from' field is empty, set it to "anon"
             if (from === "") {
@@ -340,7 +349,7 @@
                     });
             } else {
                 alert("Incorrect password. Comments will not be cleared.");
-            }
+            });
         });
 
         // Update comment count display
