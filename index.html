@@ -37,9 +37,10 @@
             min-width: 100px; /* Minimum width */
             word-wrap: break-word;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            flex-direction: column; /* Allow stacking of elements */
+            align-items: flex-start; /* Align items to the start */
+            justify-content: flex-start; /* Start alignment */
+            text-align: left; /* Left-align text */
             overflow: hidden; /* Hide overflow */
             box-shadow: none; /* Remove shadow */
             font-family: 'Shifty Notes', Arial, sans-serif; /* Use Shifty Notes font for messages */
@@ -70,6 +71,10 @@
         #charLimitMessage {
             color: red; /* Red color for error message */
             margin-top: 5px;
+        }
+        .from-text {
+            font-weight: bold; /* Make the "From:" text bold */
+            margin-bottom: 5px; /* Add some space below the "From:" text */
         }
     </style>
 </head>
@@ -154,7 +159,14 @@
         function createStickyNote(from, message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
-            note.textContent = `${from ? from + ': ' : ''}${message}`; // Display "From:" if provided
+
+            // Create "From:" text element
+            const fromText = document.createElement("div");
+            fromText.className = "from-text";
+            fromText.textContent = from ? `From: ${from}` : ""; // Format the "From:" text
+
+            note.appendChild(fromText); // Add "From:" text to the note
+            note.appendChild(document.createTextNode(message)); // Add the message text to the note
 
             // Set a random background image from the array
             const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
