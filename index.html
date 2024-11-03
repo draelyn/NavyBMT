@@ -103,24 +103,27 @@
         }
 
         let dragNote = null;
-        let offsetX, offsetY;
 
         function mouseDown(event) {
             dragNote = event.target;
-            offsetX = event.clientX - dragNote.getBoundingClientRect().left;
-            offsetY = event.clientY - dragNote.getBoundingClientRect().top;
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
+            mouseMove(event); // Call move once to "catch" the note
         }
 
         function mouseMove(event) {
             if (dragNote) {
-                // Calculate new position
-                const x = event.clientX - offsetX;
-                const y = event.clientY - offsetY;
+                const x = event.clientX - dragNote.clientWidth / 2; // Center the note
+                const y = event.clientY - dragNote.clientHeight / 2;
 
-                // Prevent overlapping with other elements
-                if (isWithinBounds(x, y)) {
+                // Check boundaries and adjust position if necessary
+                if (!isWithinBounds(x, y)) {
+                    // Move it out of bounds slightly
+                    const outOfBoundsX = (x < 0) ? 10 : (x + dragNote.clientWidth > window.innerWidth ? window.innerWidth - dragNote.clientWidth - 10 : x);
+                    const outOfBoundsY = (y < 0) ? 10 : (y + dragNote.clientHeight > window.innerHeight ? window.innerHeight - dragNote.clientHeight - 10 : y);
+                    dragNote.style.left = `${outOfBoundsX}px`;
+                    dragNote.style.top = `${outOfBoundsY}px`;
+                } else {
                     dragNote.style.left = `${x}px`;
                     dragNote.style.top = `${y}px`;
                 }
@@ -136,20 +139,24 @@
         function touchStart(event) {
             dragNote = event.target;
             const touch = event.touches[0];
-            offsetX = touch.clientX - dragNote.getBoundingClientRect().left;
-            offsetY = touch.clientY - dragNote.getBoundingClientRect().top;
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
+            touchMove(event); // Call move once to "catch" the note
         }
 
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                const x = touch.clientX - offsetX;
-                const y = touch.clientY - offsetY;
+                const x = touch.clientX - dragNote.clientWidth / 2; // Center the note
+                const y = touch.clientY - dragNote.clientHeight / 2;
 
-                // Prevent overlapping with other elements
-                if (isWithinBounds(x, y)) {
+                // Check boundaries and adjust position if necessary
+                if (!isWithinBounds(x, y)) {
+                    const outOfBoundsX = (x < 0) ? 10 : (x + dragNote.clientWidth > window.innerWidth ? window.innerWidth - dragNote.clientWidth - 10 : x);
+                    const outOfBoundsY = (y < 0) ? 10 : (y + dragNote.clientHeight > window.innerHeight ? window.innerHeight - dragNote.clientHeight - 10 : y);
+                    dragNote.style.left = `${outOfBoundsX}px`;
+                    dragNote.style.top = `${outOfBoundsY}px`;
+                } else {
                     dragNote.style.left = `${x}px`;
                     dragNote.style.top = `${y}px`;
                 }
