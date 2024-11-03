@@ -16,17 +16,6 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        #messageBoard {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-            border: 2px solid black;
-            padding: 20px;
-            min-height: 200px;
-            position: relative; /* Added for positioning sticky notes */
-        }
         .sticky-note {
             background-color: #ffeb3b;
             padding: 10px;
@@ -53,7 +42,6 @@
     <div id="countdown">Loading...</div>
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
-    <div id="messageBoard"></div>
 
     <script>
         // Countdown Timer Script
@@ -99,7 +87,7 @@
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
 
-            document.getElementById("messageBoard").appendChild(note);
+            document.body.appendChild(note); // Append directly to body
         }
 
         let dragNote = null;
@@ -203,11 +191,11 @@
         }
 
         function isWithinBounds(x, y) {
-            const boardRect = document.getElementById("messageBoard").getBoundingClientRect();
-            const minX = boardRect.left;
-            const maxX = boardRect.right - dragNote.clientWidth;
-            const minY = boardRect.top;
-            const maxY = boardRect.bottom - dragNote.clientHeight;
+            const boardRect = document.body.getBoundingClientRect(); // Use the body for bounds
+            const minX = 0;
+            const maxX = boardRect.width - dragNote.clientWidth;
+            const minY = 0;
+            const maxY = boardRect.height - dragNote.clientHeight;
 
             // Check bounds against other elements
             if (x < minX || x > maxX || y < minY || y > maxY) {
