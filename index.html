@@ -143,8 +143,8 @@
         </div>
         <div id="input-container">
             <input type="text" id="fromInput" placeholder="From: (optional)">
-            <input type="text" id="messageInput" placeholder="Type your message here">
-            <button id="postButton">Post Message</button>
+            <input type="text" id="messageInput" placeholder="Type your comment here">
+            <button id="postButton">Post Comment</button>
         </div>
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
@@ -171,12 +171,53 @@
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const commentsRef = firebase.database().ref("comments");
+        const commentsRef = database.ref("comments");
+
+        // Countdown Timer
+        function countdown() {
+            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
+            setInterval(function() {
+                const now = new Date().getTime();
+                const timeLeft = targetDate - now;
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+
+                if (timeLeft < 0) {
+                    document.getElementById("countdown").innerHTML = "The day has arrived!";
+                }
+            }, 1000);
+        }
+        countdown();
 
         // Load comments from Firebase on page load and listen for new comments
         commentsRef.on("child_added", (snapshot) => {
             const comment = snapshot.val();
             addComment(comment.from, comment.message);
+        });
+
+        // Character count and posting logic
+        const messageInput = document.getElementById("messageInput");
+        const fromInput = document.getElementById("fromInput");
+        const charCounter = document.getElementById("charCounter");
+        const charLimitMessage = document.getElementById("charLimitMessage");
+        const postButton = document.getElementById("postButton");
+
+        messageInput.addEventListener("input", () => {
+            const currentLength = messageInput.value.length;
+            charCounter.textContent = `${currentLength}/150`;
+
+            if (currentLength > 150) {
+                charLimitMessage.textContent = "Comment cannot exceed 150 characters.";
+            } else {
+                charLimitMessage.textContent = "";
+            }
         });
 
         postButton.addEventListener("click", postMessage);
@@ -186,7 +227,7 @@
             const from = fromInput.value.trim();
 
             if (message.length === 0 || message.length > 150) {
-                charLimitMessage.textContent = "Please enter a message within the character limit.";
+                charLimitMessage.textContent = "Please enter a comment within the character limit.";
                 return;
             }
 
