@@ -198,13 +198,10 @@
         }
         countdown();
 
-        // Message Functionality
+        // Character Counter
         const messageInput = document.getElementById("messageInput");
-        const fromInput = document.getElementById("fromInput");
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
-        const postButton = document.getElementById("postButton");
-        const commentsSection = document.getElementById("commentsSection");
 
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
@@ -217,6 +214,11 @@
             }
         });
 
+        // Post Message
+        const postButton = document.getElementById("postButton");
+        const fromInput = document.getElementById("fromInput");
+        const commentsSection = document.getElementById("commentsSection");
+
         postButton.addEventListener("click", postMessage);
 
         function postMessage() {
@@ -228,18 +230,23 @@
                 return;
             }
 
-            // Save the comment to Firebase
-            commentsRef.push({ from, message });
+            // Save to Firebase
+            commentsRef.push({ from, message }).catch((error) => {
+                console.error("Error saving message to Firebase:", error);
+            });
+
             messageInput.value = "";
             fromInput.value = "";
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         }
 
-        // Load comments from Firebase in real time
+        // Load Comments from Firebase
         commentsRef.on("child_added", (snapshot) => {
             const comment = snapshot.val();
             addComment(comment.from, comment.message);
+        }, (error) => {
+            console.error("Error loading comments from Firebase:", error);
         });
 
         function addComment(from, message) {
