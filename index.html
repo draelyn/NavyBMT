@@ -91,9 +91,12 @@
         }
 
         let dragNote = null;
+        let offsetX, offsetY;
 
         function mouseDown(event) {
             dragNote = event.target;
+            offsetX = event.clientX - dragNote.getBoundingClientRect().left;
+            offsetY = event.clientY - dragNote.getBoundingClientRect().top;
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
             mouseMove(event); // Call move once to "catch" the note
@@ -101,40 +104,15 @@
 
         function mouseMove(event) {
             if (dragNote) {
-                const x = event.clientX - (dragNote.clientWidth / 2); // Center the note
-                const y = event.clientY - (dragNote.clientHeight / 2);
+                const x = event.clientX - offsetX; // Center the note
+                const y = event.clientY - offsetY;
 
-                // Check boundaries and adjust position if necessary
-                if (!isWithinBounds(x, y)) {
-                    dragNote.style.left = `${x}px`;
-                    dragNote.style.top = `${y}px`;
-                } else {
-                    dragNote.style.left = `${x}px`;
-                    dragNote.style.top = `${y}px`;
-                }
+                dragNote.style.left = `${x}px`;
+                dragNote.style.top = `${y}px`;
             }
         }
 
         function mouseUp() {
-            if (dragNote) {
-                const x = parseFloat(dragNote.style.left);
-                const y = parseFloat(dragNote.style.top);
-
-                // Check if out of bounds and adjust
-                if (!isWithinBounds(x, y)) {
-                    // Move out of bounds slightly
-                    if (x < 0) {
-                        dragNote.style.left = "10px"; // Move to right
-                    } else if (x + dragNote.clientWidth > window.innerWidth) {
-                        dragNote.style.left = `${window.innerWidth - dragNote.clientWidth - 10}px`; // Move to left
-                    }
-                    if (y < 0) {
-                        dragNote.style.top = "10px"; // Move down
-                    } else if (y + dragNote.clientHeight > window.innerHeight) {
-                        dragNote.style.top = `${window.innerHeight - dragNote.clientHeight - 10}px`; // Move up
-                    }
-                }
-            }
             dragNote = null;
             document.removeEventListener("mousemove", mouseMove);
             document.removeEventListener("mouseup", mouseUp);
@@ -143,6 +121,8 @@
         function touchStart(event) {
             dragNote = event.target;
             const touch = event.touches[0];
+            offsetX = touch.clientX - dragNote.getBoundingClientRect().left;
+            offsetY = touch.clientY - dragNote.getBoundingClientRect().top;
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
             touchMove(event); // Call move once to "catch" the note
@@ -151,72 +131,18 @@
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                const x = touch.clientX - (dragNote.clientWidth / 2); // Center the note
-                const y = touch.clientY - (dragNote.clientHeight / 2);
+                const x = touch.clientX - offsetX; // Center the note
+                const y = touch.clientY - offsetY;
 
-                // Check boundaries and adjust position if necessary
-                if (!isWithinBounds(x, y)) {
-                    dragNote.style.left = `${x}px`;
-                    dragNote.style.top = `${y}px`;
-                } else {
-                    dragNote.style.left = `${x}px`;
-                    dragNote.style.top = `${y}px`;
-                }
+                dragNote.style.left = `${x}px`;
+                dragNote.style.top = `${y}px`;
             }
         }
 
         function touchEnd() {
-            if (dragNote) {
-                const x = parseFloat(dragNote.style.left);
-                const y = parseFloat(dragNote.style.top);
-
-                // Check if out of bounds and adjust
-                if (!isWithinBounds(x, y)) {
-                    // Move out of bounds slightly
-                    if (x < 0) {
-                        dragNote.style.left = "10px"; // Move to right
-                    } else if (x + dragNote.clientWidth > window.innerWidth) {
-                        dragNote.style.left = `${window.innerWidth - dragNote.clientWidth - 10}px`; // Move to left
-                    }
-                    if (y < 0) {
-                        dragNote.style.top = "10px"; // Move down
-                    } else if (y + dragNote.clientHeight > window.innerHeight) {
-                        dragNote.style.top = `${window.innerHeight - dragNote.clientHeight - 10}px`; // Move up
-                    }
-                }
-            }
             dragNote = null;
             document.removeEventListener("touchmove", touchMove);
             document.removeEventListener("touchend", touchEnd);
-        }
-
-        function isWithinBounds(x, y) {
-            const boardRect = document.body.getBoundingClientRect(); // Use the body for bounds
-            const minX = 0;
-            const maxX = boardRect.width - dragNote.clientWidth;
-            const minY = 0;
-            const maxY = boardRect.height - dragNote.clientHeight;
-
-            // Check bounds against other elements
-            if (x < minX || x > maxX || y < minY || y > maxY) {
-                return false; // Out of bounds
-            }
-
-            // Prevent overlapping with other sticky notes
-            const notes = document.getElementsByClassName("sticky-note");
-            for (let note of notes) {
-                if (note !== dragNote) {
-                    const noteRect = note.getBoundingClientRect();
-                    if (
-                        x < noteRect.right && x + dragNote.clientWidth > noteRect.left &&
-                        y < noteRect.bottom && y + dragNote.clientHeight > noteRect.top
-                    ) {
-                        return false; // Overlapping with another note
-                    }
-                }
-            }
-
-            return true; // Within bounds and not overlapping
         }
     </script>
 </body>
