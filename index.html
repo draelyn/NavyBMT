@@ -17,8 +17,8 @@
             font-family: Arial, sans-serif; /* Default font for the body */
             text-align: center;
             margin-top: 50px;
-            background-color: black; /* Black background */
-            color: white; /* White text */
+            background-color: white; /* White background */
+            color: black; /* Black text */
         }
         #countdown {
             font-size: 36px;
@@ -171,8 +171,8 @@
             note.appendChild(document.createTextNode(message)); // Add the message text to the note
 
             // Set a random background image from the array
-            const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
-            note.style.backgroundImage = `url('${backgroundImages[randomIndex - 1]}')`; // Use randomIndex - 1
+            const randomIndex = Math.floor(Math.random() * 6); // Generate a number from 0 to 5
+            note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`; // Use randomIndex
 
             // Set random starting position
             note.style.left = Math.random() * (window.innerWidth - 100) + "px";
