@@ -31,7 +31,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 600px; /* Set max-width to 600px to mimic mobile layout */
             margin: 0 auto;
             padding: 20px;
             position: relative;
@@ -79,8 +79,8 @@
         #fromInput, #messageInput {
             padding: 10px;
             font-size: 14px;
-            width: 100%;
-            max-width: 300px;
+            width: 90%; /* Make inputs responsive */
+            max-width: none;
             margin-bottom: 10px;
         }
 
@@ -88,8 +88,8 @@
             padding: 10px 20px;
             font-size: 14px;
             cursor: pointer;
-            width: 100%;
-            max-width: 300px;
+            width: 90%; /* Make button responsive */
+            max-width: none;
         }
 
         #charCounter {
@@ -126,7 +126,7 @@
             margin-bottom: 5px;
         }
 
-        /* Mobile Styling */
+        /* Ensure consistent look across devices */
         @media (max-width: 600px) {
             #countdown {
                 gap: 10px;
@@ -143,11 +143,6 @@
 
             h1 {
                 font-size: 1.5em;
-            }
-
-            #fromInput, #messageInput, #postButton {
-                width: 90%;
-                max-width: none;
             }
         }
     </style>
