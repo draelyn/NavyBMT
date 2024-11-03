@@ -48,6 +48,10 @@
             cursor: pointer;
             margin-top: 10px;
         }
+        #charLimitMessage {
+            color: red; /* Red color for error message */
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -55,6 +59,7 @@
     <div id="countdown">Loading...</div>
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
+    <div id="charLimitMessage"></div> <!-- Message for character limit -->
 
     <script>
         // Countdown Timer Script
@@ -86,10 +91,20 @@
         });
 
         function postMessage() {
-            const message = document.getElementById("messageInput").value;
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value;
+            const charLimitMessage = document.getElementById("charLimitMessage");
+
+            if (message.length > 200) {
+                charLimitMessage.textContent = "Message cannot exceed 200 characters.";
+                return; // Stop the function if message is too long
+            } else {
+                charLimitMessage.textContent = ""; // Clear the message if within limit
+            }
+
             if (message.trim() !== "") {
                 createStickyNote(message);
-                document.getElementById("messageInput").value = "";
+                messageInput.value = ""; // Clear input after posting
             }
         }
 
