@@ -120,7 +120,7 @@
             font-size: 0.9em; /* Make it 25% smaller */
         }
         #clearComments {
-            margin-top: 40px; /* Increased margin-top for bottom placement */
+            margin-top: 20px; /* Ensure there's space for comments */
             padding: 10px;
             border: 2px solid black;
             background-color: white;
@@ -133,6 +133,10 @@
         }
         #clearComments:hover {
             background-color: #f0f0f0;
+        }
+        #commentCount {
+            font-weight: bold;
+            margin-bottom: 10px; /* Space below comment count */
         }
     </style>
 </head>
@@ -164,6 +168,7 @@
         </div>
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
+        <div id="commentCount">Comments: 0</div> <!-- Comment count display -->
         <div class="comments-section" id="commentsSection">
             <h2>Comments</h2>
         </div>
@@ -299,6 +304,7 @@
             comment.appendChild(deleteButton);
 
             document.getElementById("commentsSection").appendChild(comment);
+            updateCommentCount(); // Update the comment count after adding a comment
         }
 
         function deleteComment(commentId) {
@@ -327,6 +333,7 @@
                 commentsRef.remove() // Remove all comments from Firebase
                     .then(() => {
                         document.getElementById("commentsSection").innerHTML = "<h2>Comments</h2>"; // Clear displayed comments
+                        updateCommentCount(); // Update the comment count after clearing
                         console.log("All comments cleared successfully!");
                     })
                     .catch((error) => {
@@ -336,6 +343,14 @@
                 alert("Incorrect password. Comments will not be cleared.");
             }
         });
+
+        // Update comment count display
+        function updateCommentCount() {
+            commentsRef.once("value", (snapshot) => {
+                const commentCount = snapshot.numChildren(); // Get the number of child comments
+                document.getElementById("commentCount").textContent = `Comments: ${commentCount}`; // Update the comment count display
+            });
+        }
     </script>
 </body>
 </html>
