@@ -119,6 +119,9 @@
             hyphens: auto; /* Allow hyphenation */
             max-width: 100%; /* Prevent exceeding width */
             position: relative; /* For positioning the delete button */
+            display: flex; /* Flexbox for aligning items */
+            justify-content: space-between; /* Space between items */
+            align-items: center; /* Center items vertically */
         }
         .comment-from {
             font-weight: bold;
@@ -126,17 +129,14 @@
         .comment-time {
             font-size: 0.8em; /* Smaller font for timestamp */
             color: lightgrey; /* Light grey for better visibility */
-            margin-bottom: 5px; /* Add some space below */
+            margin-right: 10px; /* Space between time and delete button */
         }
         .delete-button {
             color: red;
             cursor: pointer;
-            position: absolute;
-            right: 10px;
-            top: 5px; /* Move it up a bit */
             background: none;
             border: none;
-            font-size: 0.9em; /* Make it 25% smaller */
+            font-size: 0.9em; /* Make it smaller */
         }
     </style>
 </head>
@@ -216,7 +216,7 @@
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000)) / 1000); // Get seconds correctly
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000); // Get seconds correctly
 
                 document.getElementById("days").textContent = days < 10 ? "0" + days : days;
                 document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
@@ -371,7 +371,7 @@
                     });
             } else {
                 alert("Incorrect password. Comments will not be cleared.");
-            }
+            });
         });
 
         // Update comment count display
