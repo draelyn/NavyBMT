@@ -146,8 +146,14 @@
 
         function mouseMove(event) {
             if (dragNote) {
+                // Move the note
                 dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
                 dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
+                // Check for overlaps and adjust if necessary
+                if (isOverlapping(parseFloat(dragNote.style.left), parseFloat(dragNote.style.top), dragNote)) {
+                    dragNote.style.left = `${Math.max(0, parseFloat(dragNote.style.left) - 10)}px`;
+                    dragNote.style.top = `${Math.max(0, parseFloat(dragNote.style.top) - 10)}px`;
+                }
             }
         }
 
@@ -171,6 +177,11 @@
                 const touch = event.touches[0];
                 dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
                 dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
+                // Check for overlaps and adjust if necessary
+                if (isOverlapping(parseFloat(dragNote.style.left), parseFloat(dragNote.style.top), dragNote)) {
+                    dragNote.style.left = `${Math.max(0, parseFloat(dragNote.style.left) - 10)}px`;
+                    dragNote.style.top = `${Math.max(0, parseFloat(dragNote.style.top) - 10)}px`;
+                }
             }
         }
 
