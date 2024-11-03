@@ -123,6 +123,11 @@
         .comment-from {
             font-weight: bold;
         }
+        .comment-time {
+            font-size: 0.8em; /* Smaller font for timestamp */
+            color: lightgrey; /* Light grey for better visibility */
+            margin-bottom: 5px; /* Add some space below */
+        }
         .delete-button {
             color: red;
             cursor: pointer;
@@ -278,7 +283,7 @@
             };
             const timestamp = now.toLocaleString('en-US', options) + ' CDT'; // Format the timestamp
 
-            // Save to Firebase
+            // Save to Firebase with timestamp
             commentsRef.push({ from, message, timestamp }).then(() => {
                 console.log("Message saved successfully!");
                 document.getElementById("commentsSeparator").style.display = "block"; // Show separator
@@ -296,7 +301,7 @@
         commentsRef.on("child_added", (snapshot) => {
             const comment = snapshot.val();
             const commentId = snapshot.key; // Get the unique comment ID
-            addComment(commentId, comment.from, comment.message, comment.timestamp);
+            addComment(commentId, comment.from, comment.message, comment.timestamp); // Pass timestamp
         });
 
         function addComment(commentId, from, message, timestamp) {
@@ -312,9 +317,10 @@
             messageText.textContent = message;
             comment.appendChild(messageText);
 
+            // Create timestamp element
             const timestampText = document.createElement("div");
-            timestampText.className = "comment-timestamp";
-            timestampText.textContent = timestamp; // Add timestamp
+            timestampText.className = "comment-time";
+            timestampText.textContent = timestamp.replace(/,\s*\d{2}:\d{2}$/, ''); // Remove seconds
             comment.appendChild(timestampText);
 
             // Create delete button
@@ -365,7 +371,7 @@
                     });
             } else {
                 alert("Incorrect password. Comments will not be cleared.");
-            });
+            }
         });
 
         // Update comment count display
