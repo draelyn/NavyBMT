@@ -187,9 +187,15 @@
 
         // Load saved comments from localStorage
         window.onload = function() {
-            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
-            savedComments.forEach(comment => addComment(comment.from, comment.message));
+            loadComments();
         };
+
+        // Listen for storage events to update comments in real time
+        window.addEventListener("storage", function(event) {
+            if (event.key === "comments") {
+                loadComments();
+            }
+        });
 
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
@@ -243,6 +249,12 @@
             const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
             savedComments.push({ from, message });
             localStorage.setItem("comments", JSON.stringify(savedComments));
+        }
+
+        function loadComments() {
+            commentsSection.innerHTML = "<h2>Comments</h2>"; // Clear existing comments and add header
+            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+            savedComments.forEach(comment => addComment(comment.from, comment.message));
         }
     </script>
 </body>
