@@ -31,9 +31,6 @@
             color: black;
             cursor: pointer;
             border-radius: 5px;
-            position: absolute; /* Position it to not affect layout */
-            bottom: 20px; /* Distance from the bottom */
-            left: 20px; /* Distance from the left */
         }
         #clearComments:hover {
             background-color: #f0f0f0;
@@ -139,7 +136,6 @@
 <body>
     <div class="container">
         <h1>Drae's Navy Graduation Countdown</h1>
-        <button id="clearComments">Clear All Comments</button> <!-- Positioned below title -->
         <div id="countdown">
             <div class="countdown-section">
                 <div class="countdown-number" id="days">00</div>
@@ -169,6 +165,7 @@
             <h2>Comments:</h2>
             <hr id="commentsSeparator" style="display: none;"> <!-- Initially hidden -->
         </div>
+        <button id="clearComments">Clear All Comments</button> <!-- Positioned back to original place -->
     </div>
 
     <!-- Corrected Firebase SDKs for non-module usage -->
@@ -252,7 +249,7 @@
                 return;
             }
 
-            // Exclude "anon" when 'from' is empty
+            // If the 'from' field is empty, do nothing
             if (from === "") {
                 return; // Do nothing if the 'from' field is empty
             }
