@@ -169,7 +169,7 @@
         </div>
         <div id="input-container">
             <input type="text" id="fromInput" placeholder="From: Anonymous" maxlength="25">
-            <input type="text" id="messageInput" placeholder="Type your message here">
+            <input type="text" id="messageInput" placeholder="Type your comment...">
             <button id="postButton">Post Comment</button>
         </div>
         <div id="charCounter">0/150</div>
@@ -261,6 +261,18 @@
         const postButton = document.getElementById("postButton");
 
         postButton.addEventListener("click", () => {
+            postComment();
+        });
+
+        // Send comment when Enter is pressed
+        messageInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent form submission
+                postComment();
+            }
+        });
+
+        function postComment() {
             const message = messageInput.value.trim();
             let from = fromInput.value.trim();
 
@@ -301,7 +313,7 @@
             messageInput.value = "";
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
-        });
+        }
 
         // Load Comments from Firebase
         commentsRef.on("child_added", (snapshot) => {
