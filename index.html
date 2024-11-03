@@ -151,61 +151,32 @@
         <div class="comments-section" id="commentsSection">
             <h2>Comments</h2>
         </div>
-    </div>
+
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
     <script>
-        // Countdown Timer
-        function countdown() {
-            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
-            setInterval(function() {
-                const now = new Date().getTime();
-                const timeLeft = targetDate - now;
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
-                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
-                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
-                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
-
-                if (timeLeft < 0) {
-                    document.getElementById("countdown").innerHTML = "The day has arrived!";
-                }
-            }, 1000);
-        }
-        countdown();
-
-        // Message Functionality
-        const messageInput = document.getElementById("messageInput");
-        const fromInput = document.getElementById("fromInput");
-        const charCounter = document.getElementById("charCounter");
-        const charLimitMessage = document.getElementById("charLimitMessage");
-        const postButton = document.getElementById("postButton");
-        const commentsSection = document.getElementById("commentsSection");
-
-        // Load saved comments from localStorage
-        window.onload = function() {
-            loadComments();
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZk3mpp9g-nW1kwOvfIj6J247kHpgLTnU",
+            authDomain: "comments-469e0.firebaseapp.com",
+            projectId: "comments-469e0",
+            storageBucket: "comments-469e0.appspot.com",
+            messagingSenderId: "86029666416",
+            appId: "1:86029666416:web:f6d18cbdbef237981eccb5",
+            measurementId: "G-H9YHQD5KDE"
         };
 
-        // Listen for storage events to update comments in real time
-        window.addEventListener("storage", function(event) {
-            if (event.key === "comments") {
-                loadComments();
-            }
-        });
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const commentsRef = firebase.database().ref("comments");
 
-        messageInput.addEventListener("input", () => {
-            const currentLength = messageInput.value.length;
-            charCounter.textContent = `${currentLength}/150`;
-
-            if (currentLength > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-            } else {
-                charLimitMessage.textContent = "";
-            }
+        // Load comments from Firebase on page load and listen for new comments
+        commentsRef.on("child_added", (snapshot) => {
+            const comment = snapshot.val();
+            addComment(comment.from, comment.message);
         });
 
         postButton.addEventListener("click", postMessage);
@@ -219,8 +190,8 @@
                 return;
             }
 
-            addComment(from, message);
-            saveCommentToLocalStorage(from, message);
+            // Save the comment to Firebase
+            commentsRef.push({ from, message });
             messageInput.value = "";
             fromInput.value = "";
             charCounter.textContent = "0/150";
@@ -243,18 +214,6 @@
             comment.appendChild(messageText);
 
             commentsSection.appendChild(comment);
-        }
-
-        function saveCommentToLocalStorage(from, message) {
-            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
-            savedComments.push({ from, message });
-            localStorage.setItem("comments", JSON.stringify(savedComments));
-        }
-
-        function loadComments() {
-            commentsSection.innerHTML = "<h2>Comments</h2>"; // Clear existing comments and add header
-            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
-            savedComments.forEach(comment => addComment(comment.from, comment.message));
         }
     </script>
 </body>
