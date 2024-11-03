@@ -44,8 +44,14 @@
             box-shadow: none; /* Remove shadow */
             font-family: 'Shifty Notes', Arial, sans-serif; /* Use Shifty Notes font for messages */
         }
-        #messageInput {
+        #fromInput {
             margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        #messageInput {
+            margin-top: 10px; /* Adjusted margin */
             padding: 10px;
             font-size: 16px;
             width: 300px;
@@ -70,6 +76,7 @@
 <body>
     <h1>Draelyn's Navy Graduation Countdown</h1>
     <div id="countdown">Loading...</div>
+    <input type="text" id="fromInput" placeholder="From: (optional)"> <!-- New input field for "From:" -->
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
     <div id="charCounter">0/200</div> <!-- Character counter -->
@@ -111,6 +118,7 @@
         // Sticky Notes Functionality
         document.getElementById("postButton").addEventListener("click", postMessage);
         const messageInput = document.getElementById("messageInput");
+        const fromInput = document.getElementById("fromInput"); // Reference to the "From:" input
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
 
@@ -128,6 +136,7 @@
 
         function postMessage() {
             const message = messageInput.value;
+            const from = fromInput.value; // Get the value from the "From:" input
 
             if (message.length > 200) {
                 charLimitMessage.textContent = "Message cannot exceed 200 characters.";
@@ -135,19 +144,20 @@
             }
 
             if (message.trim() !== "") {
-                const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
-                createStickyNote(message, randomIndex); // Pass the random number to createStickyNote
+                createStickyNote(from, message); // Pass the "from" and message to createStickyNote
                 messageInput.value = ""; // Clear input after posting
                 charCounter.textContent = "0/200"; // Reset counter
+                fromInput.value = ""; // Clear the "From:" input
             }
         }
 
-        function createStickyNote(message, randomIndex) {
+        function createStickyNote(from, message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
-            note.textContent = message;
+            note.textContent = `${from ? from + ': ' : ''}${message}`; // Display "From:" if provided
 
-            // Set the background image based on the random index (adjust for zero-based index)
+            // Set a random background image from the array
+            const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
             note.style.backgroundImage = `url('${backgroundImages[randomIndex - 1]}')`; // Use randomIndex - 1
 
             // Set random starting position
