@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer</title>
+    <title>Draelyn's Navy Graduation Countdown</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,13 +25,14 @@
             border: 2px solid black;
             padding: 20px;
             min-height: 200px;
+            position: relative; /* Added for positioning sticky notes */
         }
         .sticky-note {
             background-color: #ffeb3b;
             padding: 10px;
             border: 1px solid black;
             cursor: move;
-            position: absolute;
+            position: absolute; /* To make sticky notes draggable */
         }
         #messageInput {
             margin-top: 20px;
@@ -48,7 +49,7 @@
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
-    <script src="script.js"></script> <!-- Link to your new script.js file -->
+    <script src="script.js"></script> <!-- Link to your script.js file -->
 </head>
 <body>
     <h1>Draelyn's Navy Graduation Countdown</h1>
