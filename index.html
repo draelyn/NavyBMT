@@ -8,14 +8,14 @@
     <style>
         @font-face {
             font-family: 'Shifty Notes';
-            src: url('font/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the Shifty Notes font */
+            src: url('fonts/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the Shifty Notes font */
             font-weight: normal;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'MyNewFont';
-            src: url('font/MyNewFont2.ttf') format('truetype'); /* Path to your new font file */
+            src: url('fonts/MyNewFont2.ttf') format('truetype'); /* Path to your new font file */
             font-weight: normal;
             font-style: normal;
         }
@@ -90,11 +90,11 @@
 <body>
     <h1>Draelyn's Navy Graduation Countdown</h1>
     <div id="countdown">Loading...</div>
-    <input type="text" id="fromInput" placeholder="From: (optional)"> <!-- New input field for "From:" -->
+    <input type="text" id="fromInput" placeholder="From: (optional)">
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
-    <div id="charCounter">0/150</div> <!-- Character counter updated to 150 -->
-    <div id="charLimitMessage"></div> <!-- Message for character limit -->
+    <div id="charCounter">0/150</div>
+    <div id="charLimitMessage"></div>
 
     <script>
         // Array of background images
