@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drae's Navy Graduation Countdown</title>
     <style>
         body {
@@ -48,29 +48,17 @@
             align-items: center;
             margin-top: 20px;
         }
-        #fromInput {
+        #fromInput, #messageInput, #postButton {
             padding: 10px;
             font-size: 14px;
+            width: 90%;
+            max-width: 300px;
+            margin-bottom: 10px; /* Consistent margin for all elements */
+            box-sizing: border-box;
+        }
+        #fromInput {
             width: 70%;
             max-width: 210px;
-            margin-bottom: 5px;
-            box-sizing: border-box;
-        }
-        #messageInput {
-            padding: 10px;
-            font-size: 14px;
-            width: 90%;
-            max-width: 300px;
-            margin-bottom: 5px;
-            box-sizing: border-box;
-        }
-        #postButton {
-            padding: 10px 20px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 90%;
-            max-width: 300px;
-            margin-top: 2px; /* Reduced top margin for closer spacing */
         }
         #charCounter {
             font-size: 12px;
