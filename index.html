@@ -160,3 +160,80 @@
             const note = document.createElement("div");
             note.className = "sticky-note";
 
+            // Create "From:" text element
+            const fromText = document.createElement("div");
+            fromText.className = "from-text";
+            fromText.textContent = from ? `From: ${from}` : ""; // Format the "From:" text
+
+            note.appendChild(fromText); // Add "From:" text to the note
+            note.appendChild(document.createTextNode(message)); // Add the message text to the note
+
+            // Set a random background image from the array
+            const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
+            note.style.backgroundImage = `url('${backgroundImages[randomIndex - 1]}')`; // Use randomIndex - 1
+
+            // Set random starting position
+            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
+
+            note.addEventListener("mousedown", mouseDown);
+            note.addEventListener("touchstart", touchStart);
+
+            document.body.appendChild(note);
+        }
+
+        let dragNote = null;
+
+        function mouseDown(event) {
+            dragNote = event.target;
+            dragNote.style.zIndex = 10; // Bring the dragged note to the front
+            document.addEventListener("mousemove", mouseMove);
+            document.addEventListener("mouseup", mouseUp);
+            mouseMove(event); // Update position immediately
+            event.preventDefault();
+        }
+
+        function mouseMove(event) {
+            if (dragNote) {
+                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
+                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
+            }
+        }
+
+        function mouseUp() {
+            if (dragNote) {
+                dragNote.style.zIndex = ""; // Reset the zIndex
+            }
+            dragNote = null;
+            document.removeEventListener("mousemove", mouseMove);
+            document.removeEventListener("mouseup", mouseUp);
+        }
+
+        function touchStart(event) {
+            dragNote = event.target;
+            dragNote.style.zIndex = 10; // Bring the dragged note to the front
+            document.addEventListener("touchmove", touchMove);
+            document.addEventListener("touchend", touchEnd);
+            touchMove(event);
+            event.preventDefault();
+        }
+
+        function touchMove(event) {
+            if (dragNote) {
+                const touch = event.touches[0];
+                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
+                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
+            }
+        }
+
+        function touchEnd() {
+            if (dragNote) {
+                dragNote.style.zIndex = ""; // Reset the zIndex
+            }
+            dragNote = null;
+            document.removeEventListener("touchmove", touchMove);
+            document.removeEventListener("touchend", touchEnd);
+        }
+    </script>
+</body>
+</html>
