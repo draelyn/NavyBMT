@@ -21,8 +21,28 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        #fromInput, #messageInput {
-            margin-top: 10px;
+        .sticky-note {
+            background-size: cover;
+            background-position: center;
+            padding: 10px;
+            cursor: move;
+            position: absolute;
+            user-select: none;
+            color: black;
+            width: 150px; /* Fixed width */
+            height: 150px; /* Fixed height */
+            min-height: 100px; /* Minimum height */
+            min-width: 100px; /* Minimum width */
+            word-wrap: break-word;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden; /* Hide overflow */
+            box-shadow: none; /* Remove shadow */
+        }
+        #messageInput {
+            margin-top: 20px;
             padding: 10px;
             font-size: 16px;
             width: 300px;
@@ -42,30 +62,6 @@
             color: red; /* Red color for error message */
             margin-top: 5px;
         }
-        .sticky-note {
-            font-family: 'Shifty Notes Regular', Arial, sans-serif;
-            background-size: cover;
-            background-position: center;
-            color: black;
-            padding: 10px;
-            cursor: move;
-            position: absolute;
-            user-select: none;
-            min-width: 150px;
-            min-height: 150px;
-            word-wrap: break-word;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            text-align: center;
-            aspect-ratio: 1;
-        }
-        .sticky-note .from-label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -74,8 +70,8 @@
     <input type="text" id="fromInput" placeholder="From: (optional)">
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
-    <div id="charCounter">0/150</div>
-    <div id="charLimitMessage"></div>
+    <div id="charCounter">0/150</div> <!-- Character counter -->
+    <div id="charLimitMessage"></div> <!-- Message for character limit -->
 
     <script>
         // Array of background images
@@ -141,6 +137,7 @@
             if (message.trim() !== "") {
                 createStickyNote(fromText, message);
                 messageInput.value = ""; // Clear message input after posting
+                fromInput.value = ""; // Clear the From field after posting
                 charCounter.textContent = "0/150"; // Reset counter
             }
         }
@@ -149,11 +146,11 @@
             const note = document.createElement("div");
             note.className = "sticky-note";
             
-            // Set a random background image
+            // Set a random background image from the array
             const randomIndex = Math.floor(Math.random() * backgroundImages.length);
             note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
 
-            // Add from label if available
+            // Add "From:" label if available
             if (fromText.trim()) {
                 const fromLabel = document.createElement("div");
                 fromLabel.className = "from-label";
@@ -214,4 +211,16 @@
             if (dragNote) {
                 const touch = event.touches[0];
                 dragNote.style.left = `${touch.clientX - dragNote.offsetWidth / 2}px`;
-                dragNote.style.top = `${touch.clientY - dragNote.offsetHeight
+                dragNote.style.top = `${touch.clientY - dragNote.offsetHeight / 2}px`;
+            }
+        }
+
+        function touchEnd() {
+            dragNote.style.zIndex = ""; // Reset z-index after dragging
+            dragNote = null;
+            document.removeEventListener("touchmove", touchMove);
+            document.removeEventListener("touchend", touchEnd);
+        }
+    </script>
+</body>
+</html>
