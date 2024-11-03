@@ -95,55 +95,100 @@
             // Random starting position
             note.style.left = Math.random() * 500 + "px"; 
             note.style.top = Math.random() * 200 + "px"; 
-            note.draggable = true;
 
-            note.addEventListener("dragstart", dragStart);
-            note.addEventListener("dragend", dragEnd);
-
-            // Touch events for mobile devices
+            note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
-            note.addEventListener("touchmove", touchMove);
-            note.addEventListener("touchend", touchEnd);
 
             document.getElementById("messageBoard").appendChild(note);
         }
 
         let dragNote = null;
-        function dragStart(event) {
+        let offsetX, offsetY;
+
+        function mouseDown(event) {
             dragNote = event.target;
-            event.dataTransfer.setData("text/plain", "");
+            offsetX = event.clientX - dragNote.getBoundingClientRect().left;
+            offsetY = event.clientY - dragNote.getBoundingClientRect().top;
+            document.addEventListener("mousemove", mouseMove);
+            document.addEventListener("mouseup", mouseUp);
         }
 
-        function dragEnd(event) {
+        function mouseMove(event) {
             if (dragNote) {
-                const x = event.clientX;
-                const y = event.clientY;
-                dragNote.style.left = `${x}px`;
-                dragNote.style.top = `${y}px`;
-                dragNote = null;
+                // Calculate new position
+                const x = event.clientX - offsetX;
+                const y = event.clientY - offsetY;
+
+                // Prevent overlapping with other elements
+                if (isWithinBounds(x, y)) {
+                    dragNote.style.left = `${x}px`;
+                    dragNote.style.top = `${y}px`;
+                }
             }
         }
 
-        // Touch event handlers for mobile
+        function mouseUp() {
+            dragNote = null;
+            document.removeEventListener("mousemove", mouseMove);
+            document.removeEventListener("mouseup", mouseUp);
+        }
+
         function touchStart(event) {
             dragNote = event.target;
-            event.preventDefault(); // Prevent default touch behavior
+            const touch = event.touches[0];
+            offsetX = touch.clientX - dragNote.getBoundingClientRect().left;
+            offsetY = touch.clientY - dragNote.getBoundingClientRect().top;
+            document.addEventListener("touchmove", touchMove);
+            document.addEventListener("touchend", touchEnd);
         }
 
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                const x = touch.clientX;
-                const y = touch.clientY;
+                const x = touch.clientX - offsetX;
+                const y = touch.clientY - offsetY;
 
-                // Set new position with smooth movement
-                dragNote.style.left = `${x - dragNote.clientWidth / 2}px`; // Center the note on the touch
-                dragNote.style.top = `${y - dragNote.clientHeight / 2}px`;
+                // Prevent overlapping with other elements
+                if (isWithinBounds(x, y)) {
+                    dragNote.style.left = `${x}px`;
+                    dragNote.style.top = `${y}px`;
+                }
             }
         }
 
-        function touchEnd(event) {
-            dragNote = null; // Reset the dragging variable
+        function touchEnd() {
+            dragNote = null;
+            document.removeEventListener("touchmove", touchMove);
+            document.removeEventListener("touchend", touchEnd);
+        }
+
+        function isWithinBounds(x, y) {
+            const boardRect = document.getElementById("messageBoard").getBoundingClientRect();
+            const minX = boardRect.left;
+            const maxX = boardRect.right - dragNote.clientWidth;
+            const minY = boardRect.top;
+            const maxY = boardRect.bottom - dragNote.clientHeight;
+
+            // Check bounds against other elements
+            if (x < minX || x > maxX || y < minY || y > maxY) {
+                return false; // Out of bounds
+            }
+
+            // Prevent overlapping with other sticky notes
+            const notes = document.getElementsByClassName("sticky-note");
+            for (let note of notes) {
+                if (note !== dragNote) {
+                    const noteRect = note.getBoundingClientRect();
+                    if (
+                        x < noteRect.right && x + dragNote.clientWidth > noteRect.left &&
+                        y < noteRect.bottom && y + dragNote.clientHeight > noteRect.top
+                    ) {
+                        return false; // Overlapping with another note
+                    }
+                }
+            }
+
+            return true; // Within bounds and not overlapping
         }
     </script>
 </body>
