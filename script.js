@@ -3,24 +3,24 @@ console.log("Script loaded successfully!");
 
 // Countdown Timer Function
 function countdownTimer() {
-    const targetDate = new Date("January 21, 2025 00:00:00").getTime();
+    const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted time zone if needed
 
     setInterval(function() {
         const now = new Date().getTime();
         const timeLeft = targetDate - now;
 
-        // Time calculations
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        if (timeLeft > 0) {
+            // Time calculations
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-        // Display the countdown
-        document.getElementById("countdown").innerHTML = 
-            `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
-
-        // If the countdown is finished
-        if (timeLeft < 0) {
+            // Display the countdown
+            document.getElementById("countdown").innerHTML = 
+                `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
+        } else {
+            // If the countdown is finished
             document.getElementById("countdown").innerHTML = "The day has arrived!";
         }
     }, 1000);
