@@ -43,56 +43,27 @@
         }
 
         #countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
             font-weight: bold;
             font-size: 1.5em;
             margin-bottom: 20px;
         }
 
-        .countdown-section {
-            text-align: center;
-            color: #0066cc;
-        }
-
-        .countdown-number {
-            font-size: 2.5em;
-            color: white;
-            text-shadow: 2px 2px 5px black;
-        }
-
-        .countdown-label {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            margin-top: -5px;
-        }
-
-        #input-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-
         #fromInput, #messageInput {
+            margin-top: 10px;
             padding: 10px;
-            font-size: 14px;
-            width: 90%;
-            max-width: 300px;
-            margin-bottom: 10px;
+            font-size: 16px;
+            width: 300px;
         }
 
         #postButton {
             padding: 10px 20px;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
-            width: 90%;
-            max-width: 300px;
+            margin-top: 10px;
         }
 
         #charCounter {
-            font-size: 12px;
+            font-size: 14px;
             color: grey;
             margin-top: 5px;
         }
@@ -100,14 +71,6 @@
         #charLimitMessage {
             color: red;
             margin-top: 5px;
-        }
-
-        .comments-section {
-            margin-top: 20px;
-            text-align: left;
-            max-width: 90%;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .comment {
@@ -123,36 +86,17 @@
 <body>
     <div class="container">
         <h1>Drae's Navy Graduation Countdown</h1>
-        <div id="countdown">
-            <div class="countdown-section">
-                <div class="countdown-number" id="days">00</div>
-                <div class="countdown-label">Days</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-number" id="hours">00</div>
-                <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-number" id="minutes">00</div>
-                <div class="countdown-label">Mins</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-number" id="seconds">00</div>
-                <div class="countdown-label">Secs</div>
-            </div>
-        </div>
-        <div id="input-container">
-            <input type="text" id="fromInput" placeholder="From: (optional)">
-            <input type="text" id="messageInput" placeholder="Type your comment here">
-            <button id="postButton">Post Comment</button>
-        </div>
+        <div id="countdown">Loading...</div>
+        <input type="text" id="fromInput" placeholder="From: (optional)">
+        <input type="text" id="messageInput" placeholder="Type your comment here">
+        <button id="postButton">Post Comment</button>
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
-        <div class="comments-section" id="commentsSection">
+        <div id="commentsSection">
             <h2>Comments</h2>
         </div>
 
-    <!-- Include Firebase SDK -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
@@ -161,7 +105,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyDZk3mpp9g-nW1kwOvfIj6J247kHpgLTnU",
             authDomain: "comments-469e0.firebaseapp.com",
-            databaseURL: "https://comments-469e0-default-rtdb.firebaseio.com", // Make sure to use the correct URL
+            databaseURL: "https://comments-469e0-default-rtdb.firebaseio.com",
             projectId: "comments-469e0",
             storageBucket: "comments-469e0.appspot.com",
             messagingSenderId: "86029666416",
@@ -180,35 +124,26 @@
             setInterval(function() {
                 const now = new Date().getTime();
                 const timeLeft = targetDate - now;
+
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
-                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
-                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
-                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+                document.getElementById("countdown").textContent = 
+                    `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
 
                 if (timeLeft < 0) {
-                    document.getElementById("countdown").innerHTML = "The day has arrived!";
+                    document.getElementById("countdown").textContent = "The day has arrived!";
                 }
             }, 1000);
         }
         countdown();
 
-        // Load comments from Firebase on page load and listen for new comments
-        commentsRef.on("child_added", (snapshot) => {
-            const comment = snapshot.val();
-            addComment(comment.from, comment.message);
-        });
-
-        // Character count and posting logic
+        // Character Counter
         const messageInput = document.getElementById("messageInput");
-        const fromInput = document.getElementById("fromInput");
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
-        const postButton = document.getElementById("postButton");
 
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
@@ -221,6 +156,11 @@
             }
         });
 
+        // Post Comment
+        const postButton = document.getElementById("postButton");
+        const fromInput = document.getElementById("fromInput");
+        const commentsSection = document.getElementById("commentsSection");
+
         postButton.addEventListener("click", postMessage);
 
         function postMessage() {
@@ -232,7 +172,7 @@
                 return;
             }
 
-            // Save the comment to Firebase
+            // Save to Firebase
             commentsRef.push({ from, message });
             messageInput.value = "";
             fromInput.value = "";
@@ -240,22 +180,28 @@
             charLimitMessage.textContent = "";
         }
 
-        function addComment(from, message) {
-            const comment = document.createElement("div");
-            comment.className = "comment";
+        // Load Comments
+        commentsRef.on("child_added", (snapshot) => {
+            const comment = snapshot.val();
+            displayComment(comment.from, comment.message);
+        });
+
+        function displayComment(from, message) {
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "comment";
 
             if (from) {
                 const fromText = document.createElement("div");
                 fromText.className = "comment-from";
                 fromText.textContent = `From: ${from}`;
-                comment.appendChild(fromText);
+                commentDiv.appendChild(fromText);
             }
 
             const messageText = document.createElement("div");
             messageText.textContent = message;
-            comment.appendChild(messageText);
+            commentDiv.appendChild(messageText);
 
-            commentsSection.appendChild(comment);
+            commentsSection.appendChild(commentDiv);
         }
     </script>
 </body>
