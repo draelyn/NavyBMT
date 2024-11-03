@@ -42,6 +42,27 @@
             color: red; /* Red color for error message */
             margin-top: 5px;
         }
+        .sticky-note {
+            background-size: cover;
+            background-position: center;
+            padding: 10px;
+            cursor: move;
+            position: absolute;
+            user-select: none;
+            color: black;
+            min-height: 100px; /* Minimum height */
+            min-width: 100px; /* Minimum width */
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: left;
+            overflow: hidden; /* Hide overflow */
+        }
+        .from-text {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -137,8 +158,9 @@
             const messageText = document.createTextNode(message);
             note.appendChild(messageText);
 
-            // Choose a random image
-            const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+            // Choose a random image based on a number
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            const randomImage = backgroundImages[randomIndex];
             note.style.backgroundImage = `url('${randomImage}')`;
 
             // Append note to body
