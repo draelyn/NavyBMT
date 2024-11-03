@@ -249,10 +249,11 @@
                 return;
             }
 
-            // Exclude "anon" when 'from' is empty, but do not allow empty submissions
+            // Set 'from' to "anon" if it is empty
             if (from === "") {
-                charLimitMessage.textContent = "Please enter a name.";
-                return; // Prevent submission if 'from' is empty
+                from = "anon"; // Default to "anon" if no name is provided
+            } else {
+                fromInput.value = from; // Retain the 'from' field value
             }
 
             // Save to Firebase
@@ -265,7 +266,6 @@
             });
 
             messageInput.value = "";
-            fromInput.value = ""; // Clear 'from' field after sending
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
