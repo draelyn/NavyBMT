@@ -6,8 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draelyn's Navy Graduation Countdown</title>
     <style>
+        @font-face {
+            font-family: 'Shifty Notes Regular';
+            src: url('font/ShiftyNotesRegular-BWZ6d.ttf') format('truetype');
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Shifty Notes Regular', Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
         }
@@ -175,6 +180,7 @@
             document.body.appendChild(note);
         }
 
+        // Drag and drop functionality
         let dragNote = null;
 
         function mouseDown(event) {
