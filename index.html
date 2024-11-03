@@ -85,72 +85,14 @@
             note.className = "sticky-note";
             note.textContent = message;
 
-            // Generate a random position and ensure it doesn't overlap designated areas
-            let position = getRandomPosition(note);
-            note.style.left = position.x + "px"; 
-            note.style.top = position.y + "px"; 
+            // Set random starting position
+            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
 
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
 
             document.body.appendChild(note);
-        }
-
-        function getRandomPosition(note) {
-            const minX = 0;
-            const minY = 300; // Adjust to make sure it appears below the countdown
-            const maxX = window.innerWidth - note.clientWidth;
-            const maxY = window.innerHeight - note.clientHeight - 150;
-
-            let x, y;
-            do {
-                x = Math.random() * maxX;
-                y = Math.random() * maxY;
-            } while (isOverlapping(x, y, note));
-
-            return { x, y };
-        }
-
-        function isOverlapping(x, y, note) {
-            const protectedArea = {
-                left: window.innerWidth / 2 - 200,  // Adjust width as necessary
-                right: window.innerWidth / 2 + 200,
-                top: 50,
-                bottom: 250,
-            };
-
-            const noteBounds = {
-                left: x,
-                right: x + note.clientWidth,
-                top: y,
-                bottom: y + note.clientHeight,
-            };
-
-            if (
-                noteBounds.right > protectedArea.left &&
-                noteBounds.left < protectedArea.right &&
-                noteBounds.bottom > protectedArea.top &&
-                noteBounds.top < protectedArea.bottom
-            ) {
-                return true;
-            }
-
-            const notes = document.querySelectorAll(".sticky-note");
-            for (let otherNote of notes) {
-                if (otherNote !== note) {
-                    const otherBounds = otherNote.getBoundingClientRect();
-                    if (
-                        noteBounds.right > otherBounds.left &&
-                        noteBounds.left < otherBounds.right &&
-                        noteBounds.bottom > otherBounds.top &&
-                        noteBounds.top < otherBounds.bottom
-                    ) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         let dragNote = null;
@@ -159,7 +101,7 @@
             dragNote = event.target;
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
-            mouseMove(event);
+            mouseMove(event); // Update position immediately
             event.preventDefault();
         }
 
@@ -167,11 +109,6 @@
             if (dragNote) {
                 dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
                 dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
-
-                if (isOverlapping(parseFloat(dragNote.style.left), parseFloat(dragNote.style.top), dragNote)) {
-                    dragNote.style.left = `${Math.max(0, parseFloat(dragNote.style.left) - 10)}px`;
-                    dragNote.style.top = `${Math.max(0, parseFloat(dragNote.style.top) - 10)}px`;
-                }
             }
         }
 
@@ -194,11 +131,6 @@
                 const touch = event.touches[0];
                 dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
                 dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
-
-                if (isOverlapping(parseFloat(dragNote.style.left), parseFloat(dragNote.style.top), dragNote)) {
-                    dragNote.style.left = `${Math.max(0, parseFloat(dragNote.style.left) - 10)}px`;
-                    dragNote.style.top = `${Math.max(0, parseFloat(dragNote.style.top) - 10)}px`;
-                }
             }
         }
 
