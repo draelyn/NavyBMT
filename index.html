@@ -185,6 +185,12 @@
         const postButton = document.getElementById("postButton");
         const commentsSection = document.getElementById("commentsSection");
 
+        // Load saved comments from localStorage
+        window.onload = function() {
+            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+            savedComments.forEach(comment => addComment(comment.from, comment.message));
+        };
+
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
             charCounter.textContent = `${currentLength}/150`;
@@ -208,6 +214,7 @@
             }
 
             addComment(from, message);
+            saveCommentToLocalStorage(from, message);
             messageInput.value = "";
             fromInput.value = "";
             charCounter.textContent = "0/150";
@@ -230,6 +237,12 @@
             comment.appendChild(messageText);
 
             commentsSection.appendChild(comment);
+        }
+
+        function saveCommentToLocalStorage(from, message) {
+            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+            savedComments.push({ from, message });
+            localStorage.setItem("comments", JSON.stringify(savedComments));
         }
     </script>
 </body>
