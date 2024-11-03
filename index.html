@@ -273,16 +273,23 @@
             document.getElementById("commentsSection").appendChild(comment);
         }
 
-        // Clear Comments Functionality
+        // Clear Comments Functionality with Password Protection
         document.getElementById("clearComments").addEventListener("click", () => {
-            commentsRef.remove() // Remove all comments from Firebase
-                .then(() => {
-                    document.getElementById("commentsSection").innerHTML = "<h2>Comments</h2>"; // Clear displayed comments
-                    console.log("All comments cleared successfully!");
-                })
-                .catch((error) => {
-                    console.error("Error clearing comments:", error);
-                });
+            const password = prompt("Please enter the password to clear all comments:");
+            const correctPassword = atob("SmJ4bDQ0"); // Using Base64 to obfuscate the password
+
+            if (password === correctPassword) {
+                commentsRef.remove() // Remove all comments from Firebase
+                    .then(() => {
+                        document.getElementById("commentsSection").innerHTML = "<h2>Comments</h2>"; // Clear displayed comments
+                        console.log("All comments cleared successfully!");
+                    })
+                    .catch((error) => {
+                        console.error("Error clearing comments:", error);
+                    });
+            } else {
+                alert("Incorrect password. Comments will not be cleared.");
+            }
         });
     </script>
 </body>
