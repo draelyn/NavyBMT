@@ -92,13 +92,18 @@
             note.className = "sticky-note";
             note.textContent = message;
 
-            // Make the note draggable
-            note.style.left = Math.random() * 500 + "px"; // Random starting position
-            note.style.top = Math.random() * 200 + "px"; // Random starting position
+            // Random starting position
+            note.style.left = Math.random() * 500 + "px"; 
+            note.style.top = Math.random() * 200 + "px"; 
             note.draggable = true;
 
             note.addEventListener("dragstart", dragStart);
             note.addEventListener("dragend", dragEnd);
+
+            // Touch events for mobile devices
+            note.addEventListener("touchstart", touchStart);
+            note.addEventListener("touchmove", touchMove);
+            note.addEventListener("touchend", touchEnd);
 
             document.getElementById("messageBoard").appendChild(note);
         }
@@ -110,14 +115,31 @@
         }
 
         function dragEnd(event) {
-            const boundingRect = document.getElementById("messageBoard").getBoundingClientRect();
-            const x = event.clientX - boundingRect.left; // Get position relative to message board
-            const y = event.clientY - boundingRect.top;
-
-            // Set new position
+            const x = event.clientX;
+            const y = event.clientY;
             dragNote.style.left = `${x}px`;
             dragNote.style.top = `${y}px`;
             dragNote = null;
+        }
+
+        // Touch event handlers for mobile
+        function touchStart(event) {
+            dragNote = event.target;
+            event.preventDefault(); // Prevent default touch behavior
+        }
+
+        function touchMove(event) {
+            if (dragNote) {
+                const touch = event.touches[0];
+                const x = touch.clientX;
+                const y = touch.clientY;
+                dragNote.style.left = `${x - dragNote.clientWidth / 2}px`; // Center the note on the touch
+                dragNote.style.top = `${y - dragNote.clientHeight / 2}px`;
+            }
+        }
+
+        function touchEnd(event) {
+            dragNote = null; // Reset the dragging variable
         }
     </script>
 </body>
