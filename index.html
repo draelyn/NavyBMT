@@ -64,12 +64,13 @@
             max-width: 210px;
         }
         #postButton {
-            color: #0066cc;
+            color: #0066cc; /* Blue text */
             background-color: white;
             cursor: pointer;
-            max-width: 273px; /* Increased width by 30% from previous 210px */
+            width: 75%; /* Set width to 75% of the message input width */
+            max-width: 180px; /* Adjust width for the button */
             border-radius: 20px; /* More rounded corners */
-            padding: 9px; /* Reduced height by 10% */
+            padding: 10px; /* Maintain padding for height */
             font-size: 16px; /* Keep the font size */
         }
         #postButton:hover {
@@ -144,7 +145,7 @@
             authDomain: "comments-469e0.firebaseapp.com",
             databaseURL: "https://comments-469e0-default-rtdb.firebaseio.com",
             projectId: "comments-469e0",
-            storageBucket: "comments-469e0.appspot.com",
+            storageBucket: "comments-469e0",
             messagingSenderId: "86029666416",
             appId: "1:86029666416:web:f6d18cbdbef237981eccb5",
             measurementId: "G-H9YHQD5KDE"
