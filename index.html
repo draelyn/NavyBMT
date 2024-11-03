@@ -276,7 +276,6 @@
             });
 
             messageInput.value = "";
-            fromInput.value = ""; // Clear 'from' field after sending
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
@@ -349,7 +348,7 @@
                     });
             } else {
                 alert("Incorrect password. Comments will not be cleared.");
-            });
+            }
         });
 
         // Update comment count display
