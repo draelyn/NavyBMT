@@ -25,7 +25,12 @@
             cursor: move;
             position: absolute;
             user-select: none;
-            color: white; /* Change text color to be readable on the image */
+            color: black; /* Change text color for visibility */
+            min-width: 100px; /* Minimum width */
+            min-height: 50px; /* Minimum height */
+            max-width: 200px; /* Limit the maximum width */
+            word-wrap: break-word; /* Allows the text to wrap */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
         }
         #messageInput {
             margin-top: 20px;
