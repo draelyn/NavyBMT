@@ -192,7 +192,7 @@
 
         console.log("Firebase initialized successfully!");
 
-        // Countdown Timer
+        // Countdown Timer (reverted to previous logic)
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
             setInterval(function() {
@@ -211,7 +211,6 @@
 
                 // If the countdown reaches zero
                 if (timeLeft <= 0) {
-                    clearInterval(); // Stop the countdown
                     document.getElementById("days").textContent = "00";
                     document.getElementById("hours").textContent = "00";
                     document.getElementById("minutes").textContent = "00";
@@ -250,7 +249,7 @@
                 return;
             }
 
-            // Set 'from' to "anon" if it is empty
+            // If the 'from' field is empty, set it to "anon"
             if (from === "") {
                 from = "anon"; // Default to "anon" if no name is provided
             }
@@ -265,7 +264,7 @@
             });
 
             messageInput.value = "";
-            fromInput.value = from; // Retain the 'from' field value
+            fromInput.value = ""; // Clear 'from' field after sending
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
