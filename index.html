@@ -206,34 +206,34 @@
             fromInput.value = storedFromValue; // Restore the stored value
         }
 
-        // Countdown Timer
-        function countdown() {
-            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
-            setInterval(function() {
-                const now = new Date().getTime();
-                const timeLeft = targetDate - now;
+ // Countdown Timer
+    function countdown() {
+        const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
+        const intervalId = setInterval(function() {
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
 
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000)) / 1000); // Get seconds correctly
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000); // Get seconds correctly
 
-                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
-                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
-                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
-                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+            document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+            document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
 
-                // If the countdown reaches zero
-                if (timeLeft <= 0) {
-                    clearInterval(); // Stop the countdown
-                    document.getElementById("days").textContent = "00";
-                    document.getElementById("hours").textContent = "00";
-                    document.getElementById("minutes").textContent = "00";
-                    document.getElementById("seconds").textContent = "00";
-                }
-            }, 1000);
-        }
-        countdown();
+            // If the countdown reaches zero
+            if (timeLeft <= 0) {
+                clearInterval(intervalId); // Stop the countdown
+                document.getElementById("days").textContent = "00";
+                document.getElementById("hours").textContent = "00";
+                document.getElementById("minutes").textContent = "00";
+                document.getElementById("seconds").textContent = "00";
+            }
+        }, 1000);
+    }
+    countdown();
 
         // Character Counter
         const messageInput = document.getElementById("messageInput");
