@@ -145,6 +145,9 @@
             note.style.width = `${randomNote.width}px`;
             note.style.height = `${randomNote.height}px`;
 
+            // Ensure the image loads correctly
+            note.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; // White background to ensure visibility
+
             // Set random starting position
             const left = Math.random() * (window.innerWidth - randomNote.width);
             const top = Math.random() * (window.innerHeight - randomNote.height);
