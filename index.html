@@ -21,11 +21,11 @@
         }
 
         body {
-            font-family: Arial, sans-serif; /* Default font for the body */
+            font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
-            background-color: white; /* White background */
-            color: black; /* Black text */
+            background-color: white;
+            color: black;
         }
         #countdown {
             font-size: 36px;
@@ -39,29 +39,22 @@
             cursor: move;
             position: absolute;
             user-select: none;
-            color: black; /* Text color in sticky notes */
-            width: 150px; /* Fixed width */
-            height: 150px; /* Fixed height */
-            min-height: 100px; /* Minimum height */
-            min-width: 100px; /* Minimum width */
+            color: black;
+            width: 150px;
+            height: 150px;
+            min-height: 100px;
+            min-width: 100px;
             word-wrap: break-word;
             display: flex;
-            flex-direction: column; /* Allow stacking of elements */
-            align-items: flex-start; /* Align items to the start */
-            justify-content: flex-start; /* Start alignment */
-            text-align: left; /* Left-align text */
-            overflow: hidden; /* Hide overflow */
-            box-shadow: none; /* Remove shadow */
-            font-family: 'MyNewFont', Arial, sans-serif; /* Use the new font for sticky notes */
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            text-align: left;
+            overflow: hidden;
+            font-family: 'MyNewFont', Arial, sans-serif;
         }
-        #fromInput {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-        }
-        #messageInput {
-            margin-top: 10px; /* Adjusted margin */
+        #fromInput, #messageInput {
+            margin-top: 10px;
             padding: 10px;
             font-size: 16px;
             width: 300px;
@@ -78,12 +71,12 @@
             margin-top: 5px;
         }
         #charLimitMessage {
-            color: red; /* Red color for error message */
+            color: red;
             margin-top: 5px;
         }
         .from-text {
-            font-weight: bold; /* Make the "From:" text bold */
-            margin-bottom: 5px; /* Add some space below the "From:" text */
+            font-weight: bold;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -96,153 +89,6 @@
     <div id="charCounter">0/150</div>
     <div id="charLimitMessage"></div>
 
-    <script>
-        // Array of background images
-        const backgroundImages = [
-            'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526805273612318/Pngtreedownload_for_free_simple_colorful_6860147_6.png?ex=6728701e&is=67271e9e&hm=34e981a461ec2564df0701f32f36c00443d5996fbc6188015b9ca3da4c1a4050&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526979517714473/Pngtreedownload_for_free_simple_colorful_6860147_7.png?ex=67287047&is=67271ec7&hm=def3c3c54105ef2811c2ca0898c7c4f40bc9db269551b1f29cb948b84affe168&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302527123617087509/Pngtreedownload_for_free_simple_colorful_6860147_8.png?ex=6728706a&is=67271eea&hm=d0252a3d828db119444847a593e02346a1d8e4cf268a2567e89327c6d2326d70&=&format=webp&quality=lossless',
-            'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png?ex=67286fdb&is=67271e5b&hm=0ca66ef71ca72ccafb7ac4cf3e430f61d7d7281eb2809f228779ae411877f18a&=&format=webp&quality=lossless',
-        ];
-
-        // Countdown Timer Script
-        function countdown() {
-            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
-            setInterval(function() {
-                const now = new Date().getTime();
-                const timeLeft = targetDate - now;
-
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                document.getElementById("countdown").innerHTML = 
-                    `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
-
-                if (timeLeft < 0) {
-                    document.getElementById("countdown").innerHTML = "The day has arrived!";
-                }
-            }, 1000);
-        }
-        countdown();
-
-        // Sticky Notes Functionality
-        document.getElementById("postButton").addEventListener("click", postMessage);
-        const messageInput = document.getElementById("messageInput");
-        const fromInput = document.getElementById("fromInput"); // Reference to the "From:" input
-        const charCounter = document.getElementById("charCounter");
-        const charLimitMessage = document.getElementById("charLimitMessage");
-
-        // Update character count as the user types
-        messageInput.addEventListener("input", () => {
-            const currentLength = messageInput.value.length;
-            charCounter.textContent = `${currentLength}/150`; // Updated to 150
-
-            if (currentLength > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-            } else {
-                charLimitMessage.textContent = ""; // Clear message if within limit
-            }
-        });
-
-        function postMessage() {
-            const message = messageInput.value;
-            const from = fromInput.value; // Get the value from the "From:" input
-
-            if (message.length > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-                return; // Stop the function if message is too long
-            }
-
-            if (message.trim() !== "") {
-                createStickyNote(from, message); // Pass the "from" and message to createStickyNote
-                messageInput.value = ""; // Clear input after posting
-                fromInput.value = ""; // Clear "From" input after posting
-                charCounter.textContent = "0/150"; // Reset counter
-            }
-        }
-
-        function createStickyNote(from, message) {
-            const note = document.createElement("div");
-            note.className = "sticky-note";
-
-            // Create "From:" text element
-            const fromText = document.createElement("div");
-            fromText.className = "from-text";
-            fromText.textContent = from ? `From: ${from}` : ""; // Format the "From:" text
-
-            note.appendChild(fromText); // Add "From:" text to the note
-            note.appendChild(document.createTextNode(message)); // Add the message text to the note
-
-            // Set a random background image from the array
-            const randomIndex = Math.floor(Math.random() * 6); // Generate a number from 0 to 5
-            note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`; // Use randomIndex
-
-            // Set random starting position
-            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
-            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
-
-            note.addEventListener("mousedown", mouseDown);
-            note.addEventListener("touchstart", touchStart);
-
-            document.body.appendChild(note);
-        }
-
-        let dragNote = null;
-
-        function mouseDown(event) {
-            dragNote = event.target;
-            dragNote.style.zIndex = 10; // Bring the dragged note to the front
-            document.addEventListener("mousemove", mouseMove);
-            document.addEventListener("mouseup", mouseUp);
-            mouseMove(event); // Update position immediately
-            event.preventDefault();
-        }
-
-        function mouseMove(event) {
-            if (dragNote) {
-                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function mouseUp() {
-            if (dragNote) {
-                dragNote.style.zIndex = ""; // Reset the zIndex
-            }
-            dragNote = null;
-            document.removeEventListener("mousemove", mouseMove);
-            document.removeEventListener("mouseup", mouseUp);
-        }
-
-        function touchStart(event) {
-            dragNote = event.target;
-            dragNote.style.zIndex = 10; // Bring the dragged note to the front
-            document.addEventListener("touchmove", touchMove);
-            document.addEventListener("touchend", touchEnd);
-            touchMove(event);
-            event.preventDefault();
-        }
-
-        function touchMove(event) {
-            if (dragNote) {
-                const touch = event.touches[0];
-                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function touchEnd() {
-            if (dragNote) {
-                dragNote.style.zIndex = ""; // Reset the zIndex
-            }
-            dragNote = null;
-            document.removeEventListener("touchmove", touchMove);
-            document.removeEventListener("touchend", touchEnd);
-        }
-    </script>
+    <script src="script.js"></script> <!-- Link to your external JavaScript file -->
 </body>
 </html>
