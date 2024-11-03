@@ -151,29 +151,9 @@
         <div class="comments-section" id="commentsSection">
             <h2>Comments</h2>
         </div>
-
-    <!-- Include Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+    </div>
 
     <script>
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDZk3mpp9g-nW1kwOvfIj6J247kHpgLTnU",
-            authDomain: "comments-469e0.firebaseapp.com",
-            databaseURL: "https://comments-469e0-default-rtdb.firebaseio.com",
-            projectId: "comments-469e0",
-            storageBucket: "comments-469e0.appspot.com",
-            messagingSenderId: "86029666416",
-            appId: "1:86029666416:web:f6d18cbdbef237981eccb5",
-            measurementId: "G-H9YHQD5KDE"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const commentsRef = database.ref("comments");
-
         // Countdown Timer
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
@@ -197,10 +177,25 @@
         }
         countdown();
 
-        // Character Counter
+        // Message Functionality
         const messageInput = document.getElementById("messageInput");
+        const fromInput = document.getElementById("fromInput");
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
+        const postButton = document.getElementById("postButton");
+        const commentsSection = document.getElementById("commentsSection");
+
+        // Load saved comments from localStorage
+        window.onload = function() {
+            loadComments();
+        };
+
+        // Listen for storage events to update comments in real time
+        window.addEventListener("storage", function(event) {
+            if (event.key === "comments") {
+                loadComments();
+            }
+        });
 
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
@@ -213,11 +208,6 @@
             }
         });
 
-        // Post Message
-        const postButton = document.getElementById("postButton");
-        const fromInput = document.getElementById("fromInput");
-        const commentsSection = document.getElementById("commentsSection");
-
         postButton.addEventListener("click", postMessage);
 
         function postMessage() {
@@ -229,19 +219,13 @@
                 return;
             }
 
-            // Save to Firebase
-            commentsRef.push({ from, message });
+            addComment(from, message);
+            saveCommentToLocalStorage(from, message);
             messageInput.value = "";
             fromInput.value = "";
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         }
-
-        // Load Comments from Firebase
-        commentsRef.on("child_added", (snapshot) => {
-            const comment = snapshot.val();
-            addComment(comment.from, comment.message);
-        });
 
         function addComment(from, message) {
             const comment = document.createElement("div");
@@ -259,6 +243,18 @@
             comment.appendChild(messageText);
 
             commentsSection.appendChild(comment);
+        }
+
+        function saveCommentToLocalStorage(from, message) {
+            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+            savedComments.push({ from, message });
+            localStorage.setItem("comments", JSON.stringify(savedComments));
+        }
+
+        function loadComments() {
+            commentsSection.innerHTML = "<h2>Comments</h2>"; // Clear existing comments and add header
+            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+            savedComments.forEach(comment => addComment(comment.from, comment.message));
         }
     </script>
 </body>
