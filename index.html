@@ -123,6 +123,10 @@
         .comment-from {
             font-weight: bold;
         }
+        .comment-time {
+            font-size: 0.8em; /* Smaller font for time */
+            color: lightgrey; /* Light grey for contrast */
+        }
         .delete-button {
             color: red;
             cursor: pointer;
@@ -194,13 +198,6 @@
 
         console.log("Firebase initialized successfully!");
 
-        // Load persistent fromInput value from local storage
-        const fromInput = document.getElementById("fromInput");
-        const storedFromValue = localStorage.getItem("fromInput");
-        if (storedFromValue) {
-            fromInput.value = storedFromValue; // Restore the stored value
-        }
-
         // Countdown Timer
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
@@ -258,16 +255,14 @@
                 return;
             }
 
-            // Save the 'from' field to local storage
-            localStorage.setItem("fromInput", from);
-
             // If the 'from' field is empty, set it to "anon"
             if (from === "") {
                 from = "anon"; // Default to "anon" if no name is provided
             }
 
             // Save to Firebase
-            commentsRef.push({ from, message }).then(() => {
+            const timestamp = new Date().toLocaleString(); // Get current date and time
+            commentsRef.push({ from, message, timestamp }).then(() => {
                 console.log("Message saved successfully!");
                 document.getElementById("commentsSeparator").style.display = "block"; // Show separator
                 updateCommentCount(); // Update the comment count after adding a comment
@@ -276,6 +271,7 @@
             });
 
             messageInput.value = "";
+            fromInput.value = ""; // Clear 'from' field after sending
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
@@ -284,10 +280,10 @@
         commentsRef.on("child_added", (snapshot) => {
             const comment = snapshot.val();
             const commentId = snapshot.key; // Get the unique comment ID
-            addComment(commentId, comment.from, comment.message);
+            addComment(commentId, comment.from, comment.message, comment.timestamp); // Pass timestamp to addComment
         });
 
-        function addComment(commentId, from, message) {
+        function addComment(commentId, from, message, timestamp) {
             const comment = document.createElement("div");
             comment.className = "comment";
 
@@ -299,6 +295,12 @@
             const messageText = document.createElement("div");
             messageText.textContent = message;
             comment.appendChild(messageText);
+
+            // Create timestamp element
+            const timestampText = document.createElement("div");
+            timestampText.className = "comment-time";
+            timestampText.textContent = timestamp; // Display timestamp
+            comment.appendChild(timestampText);
 
             // Create delete button
             const deleteButton = document.createElement("button");
