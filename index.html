@@ -17,15 +17,13 @@
             margin-bottom: 20px;
         }
         .sticky-note {
-            background-size: cover;
+            background-size: contain; /* Maintain aspect ratio */
             background-position: center;
             padding: 10px;
             cursor: move;
             position: absolute;
             user-select: none;
             color: black;
-            max-width: 150px; /* Max width */
-            max-height: 150px; /* Max height */
             min-height: 100px; /* Minimum height */
             min-width: 100px; /* Minimum width */
             word-wrap: break-word;
@@ -68,7 +66,7 @@
     <div id="charLimitMessage"></div> <!-- Message for character limit -->
 
     <script>
-        // Array of background images with fixed sizes
+        // Array of background images with dimensions for aspect ratio
         const stickyNoteImages = [
             { url: 'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for-free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless', width: 150, height: 150 },
             { url: 'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for-free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless', width: 150, height: 150 },
@@ -143,9 +141,13 @@
             const randomNote = stickyNoteImages[Math.floor(Math.random() * stickyNoteImages.length)];
             note.style.backgroundImage = `url('${randomNote.url}')`;
 
+            // Set the dimensions to match the image while maintaining aspect ratio
+            note.style.width = `${randomNote.width}px`;
+            note.style.height = `${randomNote.height}px`;
+
             // Set random starting position
-            const left = Math.random() * (window.innerWidth - 100); // Ensure some padding for small notes
-            const top = Math.random() * (window.innerHeight - 100); // Ensure some padding for small notes
+            const left = Math.random() * (window.innerWidth - randomNote.width);
+            const top = Math.random() * (window.innerHeight - randomNote.height);
             note.style.left = `${left}px`;
             note.style.top = `${top}px`;
 
