@@ -91,12 +91,9 @@
         }
 
         let dragNote = null;
-        let offsetX, offsetY;
 
         function mouseDown(event) {
             dragNote = event.target;
-            offsetX = event.clientX - dragNote.getBoundingClientRect().left;
-            offsetY = event.clientY - dragNote.getBoundingClientRect().top;
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
             mouseMove(event); // Call move once to "catch" the note
@@ -104,9 +101,11 @@
 
         function mouseMove(event) {
             if (dragNote) {
-                const x = event.clientX - offsetX; // Center the note
-                const y = event.clientY - offsetY;
+                // Set the note's position to the cursor's position directly
+                const x = event.clientX - (dragNote.clientWidth / 2); // Center the note
+                const y = event.clientY - (dragNote.clientHeight / 2);
 
+                // Update the position of the sticky note
                 dragNote.style.left = `${x}px`;
                 dragNote.style.top = `${y}px`;
             }
@@ -121,8 +120,6 @@
         function touchStart(event) {
             dragNote = event.target;
             const touch = event.touches[0];
-            offsetX = touch.clientX - dragNote.getBoundingClientRect().left;
-            offsetY = touch.clientY - dragNote.getBoundingClientRect().top;
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
             touchMove(event); // Call move once to "catch" the note
@@ -131,9 +128,11 @@
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                const x = touch.clientX - offsetX; // Center the note
-                const y = touch.clientY - offsetY;
+                // Set the note's position to the touch's position directly
+                const x = touch.clientX - (dragNote.clientWidth / 2); // Center the note
+                const y = touch.clientY - (dragNote.clientHeight / 2);
 
+                // Update the position of the sticky note
                 dragNote.style.left = `${x}px`;
                 dragNote.style.top = `${y}px`;
             }
