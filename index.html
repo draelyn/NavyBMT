@@ -24,8 +24,8 @@
             position: absolute;
             user-select: none;
             color: black;
-            width: 150px; /* Fixed width */
-            height: 150px; /* Fixed height */
+            max-width: 150px; /* Max width */
+            max-height: 150px; /* Max height */
             min-height: 100px; /* Minimum height */
             min-width: 100px; /* Minimum width */
             word-wrap: break-word;
@@ -142,15 +142,10 @@
             // Set a random background image from the array
             const randomNote = stickyNoteImages[Math.floor(Math.random() * stickyNoteImages.length)];
             note.style.backgroundImage = `url('${randomNote.url}')`;
-            note.style.width = `${randomNote.width}px`;
-            note.style.height = `${randomNote.height}px`;
-
-            // Ensure the image loads correctly
-            note.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; // White background to ensure visibility
 
             // Set random starting position
-            const left = Math.random() * (window.innerWidth - randomNote.width);
-            const top = Math.random() * (window.innerHeight - randomNote.height);
+            const left = Math.random() * (window.innerWidth - 100); // Ensure some padding for small notes
+            const top = Math.random() * (window.innerHeight - 100); // Ensure some padding for small notes
             note.style.left = `${left}px`;
             note.style.top = `${top}px`;
 
