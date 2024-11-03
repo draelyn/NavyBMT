@@ -52,10 +52,11 @@
             padding: 10px;
             font-size: 14px;
             width: 90%;
-            max-width: 240px; /* Reduced width for a shorter button */
+            max-width: 240px;
             margin-bottom: 4px;
             box-sizing: border-box;
-            border: 2px solid #0066cc; /* Thicker and uniform blue border */
+            border: 2px solid black; /* Black border for input boxes */
+            color: black; /* Black text for input boxes */
             border-radius: 4px; /* Slightly rounded corners */
         }
         #fromInput {
@@ -87,7 +88,7 @@
             margin-right: auto;
         }
         .comment {
-            border-bottom: 2px solid #0066cc; /* Thicker blue border for comments */
+            border-bottom: 2px solid black; /* Black border for comment lines */
             padding: 10px 0;
         }
         .comment-from {
@@ -154,7 +155,7 @@
 
         // Countdown Timer
         function countdown() {
-            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
+            const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime();
             setInterval(function() {
                 const now = new Date().getTime();
                 const timeLeft = targetDate - now;
@@ -169,7 +170,7 @@
 
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000)) / 1000);
 
                 document.getElementById("days").textContent = days < 10 ? "0" + days : days;
@@ -239,7 +240,7 @@
 
             const fromText = document.createElement("div");
             fromText.className = "comment-from";
-            fromText.textContent = `From: ${from}`;
+            fromText.textContent = `From:${from}`; // Removed the space after colon
             comment.appendChild(fromText);
 
             const messageText = document.createElement("div");
