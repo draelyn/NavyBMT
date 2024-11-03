@@ -49,23 +49,12 @@
             align-items: center;
             margin-top: 20px;
         }
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        #fromInput, #messageInput {
+            padding: 10px;
+            font-size: 14px;
             width: 90%;
-            max-width: 500px;
-        }
-        #fromInput {
-            padding: 10px;
-            font-size: 14px;
-            width: 30%; /* Smaller width for the "From" input */
-            box-sizing: border-box;
-        }
-        #messageInput {
-            padding: 10px;
-            font-size: 14px;
-            width: 70%; /* Full width for the "Message" input */
+            max-width: 300px;
+            margin-bottom: 10px;
             box-sizing: border-box;
         }
         #postButton {
@@ -74,7 +63,6 @@
             cursor: pointer;
             width: 90%;
             max-width: 300px;
-            margin-top: 10px;
         }
         #charCounter {
             font-size: 12px;
@@ -123,10 +111,8 @@
             </div>
         </div>
         <div id="input-container">
-            <div class="input-row">
-                <input type="text" id="fromInput" placeholder="From: Anonymous">
-                <input type="text" id="messageInput" placeholder="Type your message here">
-            </div>
+            <input type="text" id="fromInput" placeholder="From: Anonymous" maxlength="25">
+            <input type="text" id="messageInput" placeholder="Type your message here">
             <button id="postButton">Post Comment</button>
         </div>
         <div id="charCounter">0/150</div>
@@ -159,11 +145,6 @@
         const commentsRef = database.ref("comments");
 
         console.log("Firebase initialized successfully!");
-
-        // Test writing to Firebase
-        database.ref("test").set({ hello: "world" })
-            .then(() => console.log("Test write successful!"))
-            .catch((error) => console.error("Test write failed:", error));
 
         // Character Counter
         const messageInput = document.getElementById("messageInput");
