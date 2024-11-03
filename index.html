@@ -134,6 +134,12 @@
         #clearComments:hover {
             background-color: #f0f0f0;
         }
+        hr {
+            border: none; /* Remove default border */
+            height: 2px; /* Set height */
+            background-color: black; /* Set color */
+            margin: 10px 0; /* Margin around the line */
+        }
     </style>
 </head>
 <body>
@@ -165,7 +171,8 @@
         <div id="charCounter">0/150</div>
         <div id="charLimitMessage"></div>
         <div class="comments-section" id="commentsSection">
-            <h2>Comments: <span id="commentCount">0</span></h2> <!-- Combined with comment count -->
+            <h2>Comments:</h2>
+            <hr> <!-- Separation line added -->
         </div>
         <button id="clearComments">Clear All Comments</button>
     </div>
@@ -328,7 +335,7 @@
             if (password === correctPassword) {
                 commentsRef.remove() // Remove all comments from Firebase
                     .then(() => {
-                        document.getElementById("commentsSection").innerHTML = "<h2>Comments:</h2>"; // Clear displayed comments
+                        document.getElementById("commentsSection").innerHTML = "<h2>Comments:</h2><hr>"; // Clear displayed comments
                         updateCommentCount(); // Update the comment count after clearing
                         console.log("All comments cleared successfully!");
                     })
