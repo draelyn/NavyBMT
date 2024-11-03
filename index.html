@@ -17,6 +17,8 @@
             font-family: Arial, sans-serif; /* Default font for the body */
             text-align: center;
             margin-top: 50px;
+            background-color: black; /* Black background */
+            color: white; /* White text */
         }
         #countdown {
             font-size: 36px;
@@ -30,7 +32,7 @@
             cursor: move;
             position: absolute;
             user-select: none;
-            color: black;
+            color: black; /* Text color in sticky notes */
             width: 150px; /* Fixed width */
             height: 150px; /* Fixed height */
             min-height: 100px; /* Minimum height */
@@ -151,8 +153,8 @@
             if (message.trim() !== "") {
                 createStickyNote(from, message); // Pass the "from" and message to createStickyNote
                 messageInput.value = ""; // Clear input after posting
+                fromInput.value = ""; // Clear "From" input after posting
                 charCounter.textContent = "0/150"; // Reset counter
-                // Don't clear the "From:" input if it has a value
             }
         }
 
