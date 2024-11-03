@@ -22,7 +22,7 @@
             border: 1px solid black;
             cursor: move;
             position: absolute; /* To make sticky notes draggable */
-            transition: left 0.2s ease, top 0.2s ease; /* Smooth movement */
+            user-select: none; /* Prevent text selection on drag */
         }
         #messageInput {
             margin-top: 20px;
@@ -97,17 +97,14 @@
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
             mouseMove(event); // Call move once to "catch" the note
+            event.preventDefault(); // Prevent text selection
         }
 
         function mouseMove(event) {
             if (dragNote) {
-                // Set the note's position to the cursor's position directly
-                const x = event.clientX - (dragNote.clientWidth / 2); // Center the note
-                const y = event.clientY - (dragNote.clientHeight / 2);
-
-                // Update the position of the sticky note
-                dragNote.style.left = `${x}px`;
-                dragNote.style.top = `${y}px`;
+                // Directly set the sticky note's position to the mouse coordinates
+                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
+                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
             }
         }
 
@@ -123,18 +120,15 @@
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
             touchMove(event); // Call move once to "catch" the note
+            event.preventDefault(); // Prevent text selection
         }
 
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                // Set the note's position to the touch's position directly
-                const x = touch.clientX - (dragNote.clientWidth / 2); // Center the note
-                const y = touch.clientY - (dragNote.clientHeight / 2);
-
-                // Update the position of the sticky note
-                dragNote.style.left = `${x}px`;
-                dragNote.style.top = `${y}px`;
+                // Directly set the sticky note's position to the touch coordinates
+                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
+                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
             }
         }
 
