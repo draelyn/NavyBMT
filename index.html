@@ -21,8 +21,8 @@
             padding: 10px;
             border: 1px solid black;
             cursor: move;
-            position: absolute; /* To make sticky notes draggable */
-            user-select: none; /* Prevent text selection on drag */
+            position: absolute;
+            user-select: none;
         }
         #messageInput {
             margin-top: 20px;
@@ -67,20 +67,25 @@
         countdown();
 
         // Sticky Notes Functionality
-        document.getElementById("postButton").addEventListener("click", function() {
+        document.getElementById("postButton").addEventListener("click", postMessage);
+        document.getElementById("messageInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") postMessage();
+        });
+
+        function postMessage() {
             const message = document.getElementById("messageInput").value;
             if (message.trim() !== "") {
                 createStickyNote(message);
                 document.getElementById("messageInput").value = "";
             }
-        });
+        }
 
         function createStickyNote(message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
             note.textContent = message;
 
-            // Generate a random position and ensure it doesn't overlap with specified areas
+            // Generate a random position and ensure it doesn't overlap designated areas
             let position = getRandomPosition(note);
             note.style.left = position.x + "px"; 
             note.style.top = position.y + "px"; 
@@ -88,14 +93,14 @@
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
 
-            document.body.appendChild(note); // Append directly to body
+            document.body.appendChild(note);
         }
 
         function getRandomPosition(note) {
             const minX = 0;
-            const minY = 200; // Position below the countdown area
-            const maxX = window.innerWidth - note.clientWidth; // Ensure it doesn't go off the right edge
-            const maxY = window.innerHeight - note.clientHeight - 150; // Leave space for other elements
+            const minY = 200;
+            const maxX = window.innerWidth - note.clientWidth;
+            const maxY = window.innerHeight - note.clientHeight - 150;
 
             let x, y;
             do {
@@ -107,10 +112,10 @@
         }
 
         function isOverlapping(x, y, note) {
-            const titleArea = { left: 0, right: window.innerWidth, top: 0, bottom: 50 }; // Title area
-            const countdownArea = { left: 0, right: window.innerWidth, top: 50, bottom: 100 }; // Countdown area
-            const inputArea = { left: 0, right: window.innerWidth / 2, top: 100, bottom: 150 }; // Input box area
-            const buttonArea = { left: window.innerWidth / 2, right: window.innerWidth, top: 100, bottom: 150 }; // Button area
+            const titleArea = { left: 0, right: window.innerWidth, top: 0, bottom: 50 };
+            const countdownArea = { left: 0, right: window.innerWidth, top: 50, bottom: 100 };
+            const inputArea = { left: 0, right: window.innerWidth / 2, top: 100, bottom: 150 };
+            const buttonArea = { left: window.innerWidth / 2, right: window.innerWidth, top: 100, bottom: 150 };
 
             const noteBounds = {
                 left: x,
@@ -128,10 +133,10 @@
                     noteBounds.bottom > area.top &&
                     noteBounds.top < area.bottom
                 ) {
-                    return true; // There's an overlap
+                    return true;
                 }
             }
-            return false; // No overlap
+            return false;
         }
 
         let dragNote = null;
@@ -140,16 +145,15 @@
             dragNote = event.target;
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
-            mouseMove(event); // Call move once to "catch" the note
-            event.preventDefault(); // Prevent text selection
+            mouseMove(event);
+            event.preventDefault();
         }
 
         function mouseMove(event) {
             if (dragNote) {
-                // Move the note
-                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
+                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
                 dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
-                // Check for overlaps and adjust if necessary
+
                 if (isOverlapping(parseFloat(dragNote.style.left), parseFloat(dragNote.style.top), dragNote)) {
                     dragNote.style.left = `${Math.max(0, parseFloat(dragNote.style.left) - 10)}px`;
                     dragNote.style.top = `${Math.max(0, parseFloat(dragNote.style.top) - 10)}px`;
@@ -165,19 +169,18 @@
 
         function touchStart(event) {
             dragNote = event.target;
-            const touch = event.touches[0];
             document.addEventListener("touchmove", touchMove);
             document.addEventListener("touchend", touchEnd);
-            touchMove(event); // Call move once to "catch" the note
-            event.preventDefault(); // Prevent text selection
+            touchMove(event);
+            event.preventDefault();
         }
 
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
-                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`; // Center the note
+                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
                 dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
-                // Check for overlaps and adjust if necessary
+
                 if (isOverlapping(parseFloat(dragNote.style.left), parseFloat(dragNote.style.top), dragNote)) {
                     dragNote.style.left = `${Math.max(0, parseFloat(dragNote.style.left) - 10)}px`;
                     dragNote.style.top = `${Math.max(0, parseFloat(dragNote.style.top) - 10)}px`;
