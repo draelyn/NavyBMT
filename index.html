@@ -115,11 +115,13 @@
         }
 
         function dragEnd(event) {
-            const x = event.clientX;
-            const y = event.clientY;
-            dragNote.style.left = `${x}px`;
-            dragNote.style.top = `${y}px`;
-            dragNote = null;
+            if (dragNote) {
+                const x = event.clientX;
+                const y = event.clientY;
+                dragNote.style.left = `${x}px`;
+                dragNote.style.top = `${y}px`;
+                dragNote = null;
+            }
         }
 
         // Touch event handlers for mobile
@@ -133,6 +135,8 @@
                 const touch = event.touches[0];
                 const x = touch.clientX;
                 const y = touch.clientY;
+
+                // Set new position with smooth movement
                 dragNote.style.left = `${x - dragNote.clientWidth / 2}px`; // Center the note on the touch
                 dragNote.style.top = `${y - dragNote.clientHeight / 2}px`;
             }
