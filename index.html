@@ -8,8 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: white;
-            color: black;
+            background-color: #022A3A; /* Updated background color */
+            color: white; /* Change text color to white for better contrast */
             margin: 0;
             padding: 0;
         }
@@ -19,6 +19,8 @@
             padding: 20px;
             position: relative;
             min-height: 100vh;
+            background-color: rgba(255, 255, 255, 0.8); /* Light background for content */
+            border-radius: 10px; /* Optional: Add some rounding to the container */
         }
         h1 {
             margin-top: 0; /* Align to the top */
@@ -26,14 +28,14 @@
         #clearComments {
             margin-top: 10px; /* Add space between the title and button */
             padding: 10px;
-            border: 2px solid black;
-            background-color: white;
-            color: black;
+            border: 2px solid white; /* Change border color to white */
+            background-color: transparent; /* Make background transparent */
+            color: white; /* Change text color to white */
             cursor: pointer;
             border-radius: 5px;
         }
         #clearComments:hover {
-            background-color: #f0f0f0;
+            background-color: rgba(255, 255, 255, 0.2); /* Add a hover effect */
         }
         #countdown {
             display: flex;
@@ -46,11 +48,11 @@
         }
         .countdown-section {
             text-align: center;
-            color: #0066cc;
+            color: #00ccff; /* Update countdown color to a lighter shade */
         }
         .countdown-number {
             font-size: 2.5em;
-            color: white;
+            color: white; /* Keep countdown numbers white for contrast */
             text-shadow: 2px 2px 5px black;
         }
         .countdown-label {
@@ -71,7 +73,7 @@
             max-width: 240px;
             margin-bottom: 4px;
             box-sizing: border-box;
-            border: 2px solid black; /* Black border for input boxes */
+            border: 2px solid white; /* Change input border to white */
             color: black; /* Black text for input boxes */
             border-radius: 4px; /* Slightly rounded corners */
         }
@@ -80,7 +82,7 @@
             max-width: 210px;
         }
         #postButton {
-            color: #0066cc; /* Blue text */
+            color: #00ccff; /* Blue text for post button */
             background-color: white;
             cursor: pointer;
             width: 75%; /* Set width to 75% of the message input width */
