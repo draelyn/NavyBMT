@@ -49,19 +49,24 @@
             align-items: center;
             margin-top: 20px;
         }
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
         #fromInput {
-            padding: 5px; /* Make the input smaller */
-            font-size: 12px; /* Reduce font size */
-            width: 80%;
-            max-width: 250px;
-            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 14px;
+            width: 30%; /* Smaller width for the "From" input */
+            box-sizing: border-box;
         }
         #messageInput {
             padding: 10px;
             font-size: 14px;
-            width: 90%;
-            max-width: 300px;
-            margin-bottom: 10px;
+            width: 70%; /* Full width for the "Message" input */
+            box-sizing: border-box;
         }
         #postButton {
             padding: 10px 20px;
@@ -69,6 +74,7 @@
             cursor: pointer;
             width: 90%;
             max-width: 300px;
+            margin-top: 10px;
         }
         #charCounter {
             font-size: 12px;
@@ -117,8 +123,10 @@
             </div>
         </div>
         <div id="input-container">
-            <input type="text" id="fromInput" placeholder="From: Anonymous">
-            <input type="text" id="messageInput" placeholder="Type your message here">
+            <div class="input-row">
+                <input type="text" id="fromInput" placeholder="From: Anonymous">
+                <input type="text" id="messageInput" placeholder="Type your message here">
+            </div>
             <button id="postButton">Post Comment</button>
         </div>
         <div id="charCounter">0/150</div>
