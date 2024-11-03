@@ -46,9 +46,9 @@
         #countdown {
             display: flex;
             justify-content: center;
-            gap: 15px; /* Reduced gap for better fit */
+            gap: 15px;
             font-weight: bold;
-            font-size: 1.5em; /* Smaller font size */
+            font-size: 1.5em;
             margin-bottom: 20px;
         }
 
@@ -58,13 +58,13 @@
         }
 
         .countdown-number {
-            font-size: 2.5em; /* Smaller font size */
+            font-size: 2.5em;
             color: white;
             text-shadow: 2px 2px 5px black;
         }
 
         .countdown-label {
-            font-size: 0.8em; /* Smaller font size for labels */
+            font-size: 0.8em;
             text-transform: uppercase;
             margin-top: -5px;
         }
@@ -81,7 +81,7 @@
             font-size: 14px;
             width: 100%;
             max-width: 300px;
-            margin-bottom: 10px; /* Space between inputs */
+            margin-bottom: 10px;
         }
 
         #postButton {
@@ -113,15 +113,11 @@
             color: black;
             width: 150px;
             height: 150px;
-            min-height: 100px;
-            min-width: 100px;
-            word-wrap: break-word;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
             text-align: left;
-            overflow: hidden;
             font-family: 'MyNewFont', Arial, sans-serif;
         }
 
@@ -133,25 +129,25 @@
         /* Mobile Styling */
         @media (max-width: 600px) {
             #countdown {
-                gap: 10px; /* Even smaller gap on mobile */
-                font-size: 1.2em; /* Smaller countdown font */
+                gap: 10px;
+                font-size: 1.2em;
             }
 
             .countdown-number {
-                font-size: 2em; /* Further reduced size on mobile */
+                font-size: 2em;
             }
 
             .countdown-label {
-                font-size: 0.7em; /* Smaller label size on mobile */
+                font-size: 0.7em;
             }
 
             h1 {
-                font-size: 1.5em; /* Smaller title on mobile */
+                font-size: 1.5em;
             }
 
             #fromInput, #messageInput, #postButton {
-                width: 90%; /* Wider inputs and button on mobile */
-                max-width: none; /* Remove max width */
+                width: 90%;
+                max-width: none;
             }
         }
     </style>
@@ -246,6 +242,15 @@
             charLimitMessage.textContent = "";
         }
 
+        // Array of background images for sticky notes
+        const backgroundImages = [
+            'https://example.com/image1.png',
+            'https://example.com/image2.png',
+            'https://example.com/image3.png',
+            'https://example.com/image4.png',
+            'https://example.com/image5.png',
+        ];
+
         function createStickyNote(from, message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
@@ -260,10 +265,70 @@
             const messageText = document.createTextNode(message);
             note.appendChild(messageText);
 
+            // Set a random background image
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
+
+            // Set random position
             note.style.left = Math.random() * (window.innerWidth - 150) + "px";
             note.style.top = Math.random() * (window.innerHeight - 150) + "px";
 
+            // Make the note draggable
+            note.addEventListener("mousedown", mouseDown);
+            note.addEventListener("touchstart", touchStart);
+
             document.body.appendChild(note);
+        }
+
+        let dragNote = null;
+
+        function mouseDown(event) {
+            dragNote = event.target;
+            dragNote.style.zIndex = 10;
+            document.addEventListener("mousemove", mouseMove);
+            document.addEventListener("mouseup", mouseUp);
+            event.preventDefault();
+        }
+
+        function mouseMove(event) {
+            if (dragNote) {
+                dragNote.style.left = `${event.clientX - dragNote.clientWidth / 2}px`;
+                dragNote.style.top = `${event.clientY - dragNote.clientHeight / 2}px`;
+            }
+        }
+
+        function mouseUp() {
+            if (dragNote) {
+                dragNote.style.zIndex = "";
+            }
+            dragNote = null;
+            document.removeEventListener("mousemove", mouseMove);
+            document.removeEventListener("mouseup", mouseUp);
+        }
+
+        function touchStart(event) {
+            dragNote = event.target;
+            dragNote.style.zIndex = 10;
+            document.addEventListener("touchmove", touchMove);
+            document.addEventListener("touchend", touchEnd);
+            event.preventDefault();
+        }
+
+        function touchMove(event) {
+            if (dragNote) {
+                const touch = event.touches[0];
+                dragNote.style.left = `${touch.clientX - dragNote.clientWidth / 2}px`;
+                dragNote.style.top = `${touch.clientY - dragNote.clientHeight / 2}px`;
+            }
+        }
+
+        function touchEnd() {
+            if (dragNote) {
+                dragNote.style.zIndex = "";
+            }
+            dragNote = null;
+            document.removeEventListener("touchmove", touchMove);
+            document.removeEventListener("touchend", touchEnd);
         }
     </script>
 </body>
