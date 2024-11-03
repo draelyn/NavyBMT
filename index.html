@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #022A3A; /* Set the entire background color */
+            background-color: #022A3A; /* Updated background color for the entire page */
             color: white; /* Change text color to white for better contrast */
             margin: 0;
             padding: 0;
@@ -28,7 +28,7 @@
         #clearComments {
             margin-top: 10px; /* Add space between the title and button */
             padding: 10px;
-            border: 2px solid white;
+            border: 2px solid white; /* Change border color to white */
             background-color: transparent; /* Make background transparent */
             color: white; /* Change text color to white */
             cursor: pointer;
@@ -73,9 +73,13 @@
             max-width: 240px;
             margin-bottom: 4px;
             box-sizing: border-box;
-            border: 2px solid white; /* White border for input boxes */
+            border: 2px solid white; /* Change input border to white */
             color: black; /* Black text for input boxes */
             border-radius: 4px; /* Slightly rounded corners */
+        }
+        #fromInput {
+            width: 70%;
+            max-width: 210px;
         }
         #postButton {
             color: black; /* Change text to black */
@@ -127,7 +131,7 @@
             top: 5px; /* Move it up a bit */
             background: none;
             border: none;
-            font-size: 0.9em; /* Smaller size for delete button */
+            font-size: 0.9em; /* Make it 25% smaller */
         }
     </style>
 </head>
@@ -183,7 +187,7 @@
             measurementId: "G-H9YHQD5KDE"
         };
 
-        // Correctly initialize Firebase
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const commentsRef = database.ref("comments");
@@ -200,7 +204,7 @@
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000); // Get seconds correctly
+                const seconds = Math.floor((timeLeft % (1000)) / 1000); // Get seconds correctly
 
                 document.getElementById("days").textContent = days < 10 ? "0" + days : days;
                 document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
@@ -336,14 +340,14 @@
                     });
             } else {
                 alert("Incorrect password. Comments will not be cleared.");
-            });
+            }
         });
 
         // Update comment count display
         function updateCommentCount() {
             commentsRef.once("value", (snapshot) => {
                 const commentCount = snapshot.numChildren(); // Get the number of child comments
-                document.querySelector("#commentCount").textContent = commentCount; // Update the comment count display
+                document.querySelector("#commentsSection h2").textContent = `Comments: ${commentCount}`; // Update the comment count display
             });
         }
     </script>
