@@ -187,6 +187,7 @@
     </div>
 
     <script>
+        // Countdown Timer
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
             setInterval(function() {
@@ -208,6 +209,62 @@
             }, 1000);
         }
         countdown();
+
+        // Message Functionality
+        const messageInput = document.getElementById("messageInput");
+        const fromInput = document.getElementById("fromInput");
+        const charCounter = document.getElementById("charCounter");
+        const charLimitMessage = document.getElementById("charLimitMessage");
+        const postButton = document.getElementById("postButton");
+
+        messageInput.addEventListener("input", () => {
+            const currentLength = messageInput.value.length;
+            charCounter.textContent = `${currentLength}/150`;
+
+            if (currentLength > 150) {
+                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
+            } else {
+                charLimitMessage.textContent = "";
+            }
+        });
+
+        postButton.addEventListener("click", postMessage);
+
+        function postMessage() {
+            const message = messageInput.value.trim();
+            const from = fromInput.value.trim();
+
+            if (message.length === 0 || message.length > 150) {
+                charLimitMessage.textContent = "Please enter a message within the character limit.";
+                return;
+            }
+
+            createStickyNote(from, message);
+            messageInput.value = "";
+            fromInput.value = "";
+            charCounter.textContent = "0/150";
+            charLimitMessage.textContent = "";
+        }
+
+        function createStickyNote(from, message) {
+            const note = document.createElement("div");
+            note.className = "sticky-note";
+
+            if (from) {
+                const fromText = document.createElement("div");
+                fromText.className = "from-text";
+                fromText.textContent = `From: ${from}`;
+                note.appendChild(fromText);
+            }
+
+            const messageText = document.createTextNode(message);
+            note.appendChild(messageText);
+
+            note.style.left = Math.random() * (window.innerWidth - 150) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 150) + "px";
+
+            document.body.appendChild(note);
+        }
     </script>
 </body>
 </html>
