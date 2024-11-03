@@ -31,6 +31,9 @@
             color: black;
             cursor: pointer;
             border-radius: 5px;
+            position: absolute; /* Position it to not affect layout */
+            bottom: 20px; /* Distance from the bottom */
+            left: 20px; /* Distance from the left */
         }
         #clearComments:hover {
             background-color: #f0f0f0;
@@ -164,7 +167,7 @@
         <div id="charLimitMessage"></div>
         <div class="comments-section" id="commentsSection">
             <h2>Comments:</h2>
-            <hr> <!-- Separation line added -->
+            <hr id="commentsSeparator" style="display: none;"> <!-- Initially hidden -->
         </div>
     </div>
 
@@ -249,14 +252,15 @@
                 return;
             }
 
-            // If the 'from' field is empty, use "anon"
+            // Exclude "anon" when 'from' is empty
             if (from === "") {
-                from = "anon";
+                return; // Do nothing if the 'from' field is empty
             }
 
             // Save to Firebase
             commentsRef.push({ from, message }).then(() => {
                 console.log("Message saved successfully!");
+                document.getElementById("commentsSeparator").style.display = "block"; // Show separator
                 updateCommentCount(); // Update the comment count after adding a comment
             }).catch((error) => {
                 console.error("Error saving message to Firebase:", error);
@@ -326,7 +330,7 @@
             if (password === correctPassword) {
                 commentsRef.remove() // Remove all comments from Firebase
                     .then(() => {
-                        document.getElementById("commentsSection").innerHTML = "<h2>Comments:</h2><hr>"; // Clear displayed comments
+                        document.getElementById("commentsSection").innerHTML = "<h2>Comments:</h2><hr>"; // Clear displayed comments and hide the separator
                         updateCommentCount(); // Update the comment count after clearing
                         console.log("All comments cleared successfully!");
                     })
