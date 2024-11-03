@@ -19,7 +19,7 @@
             padding: 20px;
             position: relative;
             min-height: 100vh;
-            background-color: rgba(0, 0, 0, 0.8); /* Darker background for the content area */
+            background-color: #022A3A; /* Match the outer background color */
             border-radius: 10px; /* Optional: Add some rounding to the container */
         }
         h1 {
@@ -28,7 +28,7 @@
         #clearComments {
             margin-top: 10px; /* Add space between the title and button */
             padding: 10px;
-            border: 2px solid white; /* Change border color to white */
+            border: 2px solid white; /* White border for clear comments button */
             background-color: transparent; /* Make background transparent */
             color: white; /* Change text color to white */
             cursor: pointer;
@@ -73,7 +73,7 @@
             max-width: 240px;
             margin-bottom: 4px;
             box-sizing: border-box;
-            border: 2px solid white; /* Change input border to white */
+            border: 2px solid white; /* White border for input boxes */
             color: black; /* Black text for input boxes */
             border-radius: 4px; /* Slightly rounded corners */
         }
@@ -90,7 +90,7 @@
             border-radius: 8px; /* Weaker rounding */
             padding: 6px; /* Shortened height */
             font-size: 16px; /* Keep the font size */
-            border: 2px solid black; /* Add black border for outline */
+            border: 2px solid white; /* White border for outline */
         }
         #postButton:hover {
             background-color: #f0f0f0;
@@ -112,7 +112,7 @@
             margin-right: auto;
         }
         .comment {
-            border-bottom: 2px solid black; /* Black border for comment lines */
+            border-bottom: 2px solid white; /* White border for comment lines */
             padding: 10px 0;
             overflow-wrap: break-word; /* Prevent text overflow */
             word-wrap: break-word; /* Older browsers support */
@@ -194,6 +194,13 @@
 
         console.log("Firebase initialized successfully!");
 
+        // Load persistent fromInput value from local storage
+        const fromInput = document.getElementById("fromInput");
+        const storedFromValue = localStorage.getItem("fromInput");
+        if (storedFromValue) {
+            fromInput.value = storedFromValue; // Restore the stored value
+        }
+
         // Countdown Timer
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0600").getTime(); // Adjusted to Central Time
@@ -204,7 +211,7 @@
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000)) / 1000); // Get seconds correctly
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000); // Get seconds correctly
 
                 document.getElementById("days").textContent = days < 10 ? "0" + days : days;
                 document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
@@ -241,7 +248,6 @@
 
         // Post Message
         const postButton = document.getElementById("postButton");
-        const fromInput = document.getElementById("fromInput");
 
         postButton.addEventListener("click", () => {
             const message = messageInput.value.trim();
@@ -251,6 +257,9 @@
                 charLimitMessage.textContent = "Please enter a message within the character limit.";
                 return;
             }
+
+            // Save the 'from' field to local storage
+            localStorage.setItem("fromInput", from);
 
             // If the 'from' field is empty, set it to "anon"
             if (from === "") {
@@ -267,7 +276,6 @@
             });
 
             messageInput.value = "";
-            fromInput.value = ""; // Clear 'from' field after sending
             charCounter.textContent = "0/150";
             charLimitMessage.textContent = "";
         });
