@@ -8,7 +8,14 @@
     <style>
         @font-face {
             font-family: 'Shifty Notes';
-            src: url('font/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the font file */
+            src: url('font/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the Shifty Notes font */
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'MyNewFont';
+            src: url('font/MyNewFont2.ttf') format('truetype'); /* Path to your new font file */
             font-weight: normal;
             font-style: normal;
         }
@@ -45,7 +52,7 @@
             text-align: left; /* Left-align text */
             overflow: hidden; /* Hide overflow */
             box-shadow: none; /* Remove shadow */
-            font-family: 'Shifty Notes', Arial, sans-serif; /* Use Shifty Notes font for messages */
+            font-family: 'MyNewFont', Arial, sans-serif; /* Use the new font for sticky notes */
         }
         #fromInput {
             margin-top: 20px;
