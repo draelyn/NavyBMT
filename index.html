@@ -249,9 +249,10 @@
                 return;
             }
 
-            // If the 'from' field is empty, do nothing
+            // Exclude "anon" when 'from' is empty, but do not allow empty submissions
             if (from === "") {
-                return; // Do nothing if the 'from' field is empty
+                charLimitMessage.textContent = "Please enter a name.";
+                return; // Prevent submission if 'from' is empty
             }
 
             // Save to Firebase
