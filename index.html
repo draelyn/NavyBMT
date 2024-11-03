@@ -98,7 +98,7 @@
 
         function getRandomPosition(note) {
             const minX = 0;
-            const minY = 200;
+            const minY = 300; // Adjust to make sure it appears below the countdown
             const maxX = window.innerWidth - note.clientWidth;
             const maxY = window.innerHeight - note.clientHeight - 150;
 
@@ -112,10 +112,9 @@
         }
 
         function isOverlapping(x, y, note) {
-            // Define the boundaries for the protected area (based on screenshot)
             const protectedArea = {
-                left: window.innerWidth / 2 - 150,  // Adjust width as necessary
-                right: window.innerWidth / 2 + 150,
+                left: window.innerWidth / 2 - 200,  // Adjust width as necessary
+                right: window.innerWidth / 2 + 200,
                 top: 50,
                 bottom: 250,
             };
@@ -127,7 +126,6 @@
                 bottom: y + note.clientHeight,
             };
 
-            // Check if note overlaps the protected area
             if (
                 noteBounds.right > protectedArea.left &&
                 noteBounds.left < protectedArea.right &&
@@ -136,6 +134,22 @@
             ) {
                 return true;
             }
+
+            const notes = document.querySelectorAll(".sticky-note");
+            for (let otherNote of notes) {
+                if (otherNote !== note) {
+                    const otherBounds = otherNote.getBoundingClientRect();
+                    if (
+                        noteBounds.right > otherBounds.left &&
+                        noteBounds.left < otherBounds.right &&
+                        noteBounds.bottom > otherBounds.top &&
+                        noteBounds.top < otherBounds.bottom
+                    ) {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
