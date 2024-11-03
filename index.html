@@ -84,7 +84,7 @@
     <input type="text" id="fromInput" placeholder="From: (optional)"> <!-- New input field for "From:" -->
     <input type="text" id="messageInput" placeholder="Type your message here">
     <button id="postButton">Post Message</button>
-    <div id="charCounter">0/200</div> <!-- Character counter -->
+    <div id="charCounter">0/150</div> <!-- Character counter updated to 150 -->
     <div id="charLimitMessage"></div> <!-- Message for character limit -->
 
     <script>
@@ -130,10 +130,10 @@
         // Update character count as the user types
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
-            charCounter.textContent = `${currentLength}/200`;
+            charCounter.textContent = `${currentLength}/150`; // Updated to 150
 
-            if (currentLength > 200) {
-                charLimitMessage.textContent = "Message cannot exceed 200 characters.";
+            if (currentLength > 150) {
+                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
             } else {
                 charLimitMessage.textContent = ""; // Clear message if within limit
             }
@@ -143,15 +143,15 @@
             const message = messageInput.value;
             const from = fromInput.value; // Get the value from the "From:" input
 
-            if (message.length > 200) {
-                charLimitMessage.textContent = "Message cannot exceed 200 characters.";
+            if (message.length > 150) {
+                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
                 return; // Stop the function if message is too long
             }
 
             if (message.trim() !== "") {
                 createStickyNote(from, message); // Pass the "from" and message to createStickyNote
                 messageInput.value = ""; // Clear input after posting
-                charCounter.textContent = "0/200"; // Reset counter
+                charCounter.textContent = "0/150"; // Reset counter
                 // Don't clear the "From:" input if it has a value
             }
         }
@@ -160,72 +160,3 @@
             const note = document.createElement("div");
             note.className = "sticky-note";
 
-            // Create "From:" text element
-            const fromText = document.createElement("div");
-            fromText.className = "from-text";
-            fromText.textContent = from ? `From: ${from}` : ""; // Format the "From:" text
-
-            note.appendChild(fromText); // Add "From:" text to the note
-            note.appendChild(document.createTextNode(message)); // Add the message text to the note
-
-            // Set a random background image from the array
-            const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
-            note.style.backgroundImage = `url('${backgroundImages[randomIndex - 1]}')`; // Use randomIndex - 1
-
-            // Set random starting position
-            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
-            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
-
-            note.addEventListener("mousedown", mouseDown);
-            note.addEventListener("touchstart", touchStart);
-
-            document.body.appendChild(note);
-        }
-
-        let dragNote = null;
-
-        function mouseDown(event) {
-            dragNote = event.target;
-            document.addEventListener("mousemove", mouseMove);
-            document.addEventListener("mouseup", mouseUp);
-            mouseMove(event); // Update position immediately
-            event.preventDefault();
-        }
-
-        function mouseMove(event) {
-            if (dragNote) {
-                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function mouseUp() {
-            dragNote = null;
-            document.removeEventListener("mousemove", mouseMove);
-            document.removeEventListener("mouseup", mouseUp);
-        }
-
-        function touchStart(event) {
-            dragNote = event.target;
-            document.addEventListener("touchmove", touchMove);
-            document.addEventListener("touchend", touchEnd);
-            touchMove(event);
-            event.preventDefault();
-        }
-
-        function touchMove(event) {
-            if (dragNote) {
-                const touch = event.touches[0];
-                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function touchEnd() {
-            dragNote = null;
-            document.removeEventListener("touchmove", touchMove);
-            document.removeEventListener("touchend", touchEnd);
-        }
-    </script>
-</body>
-</html>
