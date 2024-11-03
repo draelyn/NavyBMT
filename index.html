@@ -7,20 +7,6 @@
     <title>Drae's Navy Graduation Countdown</title>
     <style>
         /* Your existing CSS */
-        @font-face {
-            font-family: 'Shifty Notes';
-            src: url('fonts/ShiftyNotesRegular-BWZ6d.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'MyNewFont';
-            src: url('fonts/MyNewFont2.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -29,119 +15,13 @@
             margin: 0;
             padding: 0;
         }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        h1 {
-            margin-top: 20px;
-            font-size: 1.8em;
-        }
-
-        #countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            font-weight: bold;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-
-        .countdown-section {
-            text-align: center;
-            color: #0066cc;
-        }
-
-        .countdown-number {
-            font-size: 2.5em;
-            color: white;
-            text-shadow: 2px 2px 5px black;
-        }
-
-        .countdown-label {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            margin-top: -5px;
-        }
-
-        #input-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        #fromInput, #messageInput {
-            padding: 10px;
-            font-size: 14px;
-            width: 90%;
-            max-width: 300px;
-            margin-bottom: 10px;
-        }
-
-        #postButton {
-            padding: 10px 20px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 90%;
-            max-width: 300px;
-        }
-
-        #charCounter {
-            font-size: 12px;
-            color: grey;
-            margin-top: 5px;
-        }
-
-        #charLimitMessage {
-            color: red;
-            margin-top: 5px;
-        }
-
-        .comments-section {
-            margin-top: 20px;
-            text-align: left;
-            max-width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .comment {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-        }
-
-        .comment-from {
-            font-weight: bold;
-        }
+        /* Additional styles... */
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Drae's Navy Graduation Countdown</h1>
-        <div id="countdown">
-            <div class="countdown-section">
-                <div class="countdown-number" id="days">00</div>
-                <div class="countdown-label">Days</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-number" id="hours">00</div>
-                <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-number" id="minutes">00</div>
-                <div class="countdown-label">Mins</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-number" id="seconds">00</div>
-                <div class="countdown-label">Secs</div>
-            </div>
-        </div>
+        <div id="countdown">00 Days 00 Hours 00 Minutes 00 Seconds</div>
         <div id="input-container">
             <input type="text" id="fromInput" placeholder="From: (optional)">
             <input type="text" id="messageInput" placeholder="Type your message here">
@@ -154,12 +34,12 @@
         </div>
     </div>
 
-    <!-- Correctly include Firebase SDKs -->
+    <!-- Correct Firebase SDKs (no type="module") -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
     <script>
-        // Firebase configuration
+        // Your Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDZk3mpp9g-nW1kwOvfIj6J247kHpgLTnU",
             authDomain: "comments-469e0.firebaseapp.com",
