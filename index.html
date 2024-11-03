@@ -112,6 +112,7 @@
 
         // Character count logic
         const messageInput = document.getElementById("messageInput");
+        const fromInput = document.getElementById("fromInput");
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
 
@@ -128,7 +129,7 @@
 
         // Posting message
         document.getElementById("postButton").addEventListener("click", () => {
-            const from = document.getElementById("fromInput").value;
+            const from = fromInput.value;
             const message = messageInput.value;
 
             if (message.length > 150) {
@@ -162,9 +163,61 @@
             const randomIndex = Math.floor(Math.random() * backgroundImages.length);
             const randomImage = backgroundImages[randomIndex];
             note.style.backgroundImage = `url('${randomImage}')`;
+            note.style.backgroundSize = 'contain'; // Adjust image size
 
-            // Append note to body
+            // Set random starting position
+            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
+
+            note.addEventListener("mousedown", mouseDown);
+            note.addEventListener("touchstart", touchStart);
+
             document.body.appendChild(note);
+        }
+
+        let dragNote = null;
+
+        function mouseDown(event) {
+            dragNote = event.target;
+            document.addEventListener("mousemove", mouseMove);
+            document.addEventListener("mouseup", mouseUp);
+            mouseMove(event); // Update position immediately
+            event.preventDefault();
+        }
+
+        function mouseMove(event) {
+            if (dragNote) {
+                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
+                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
+            }
+        }
+
+        function mouseUp() {
+            dragNote = null;
+            document.removeEventListener("mousemove", mouseMove);
+            document.removeEventListener("mouseup", mouseUp);
+        }
+
+        function touchStart(event) {
+            dragNote = event.target;
+            document.addEventListener("touchmove", touchMove);
+            document.addEventListener("touchend", touchEnd);
+            touchMove(event);
+            event.preventDefault();
+        }
+
+        function touchMove(event) {
+            if (dragNote) {
+                const touch = event.touches[0];
+                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
+                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
+            }
+        }
+
+        function touchEnd() {
+            dragNote = null;
+            document.removeEventListener("touchmove", touchMove);
+            document.removeEventListener("touchend", touchEnd);
         }
     </script>
 </body>
