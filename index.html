@@ -6,15 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draelyn's Navy Graduation Countdown</title>
     <style>
-        @font-face {
-            font-family: 'Shifty Notes';
-            src: url('font/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the font file */
-            font-weight: normal;
-            font-style: normal;
-        }
-
         body {
-            font-family: Arial, sans-serif; /* Default font for the body */
+            font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
         }
@@ -23,36 +16,14 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .sticky-note {
-            background-size: cover;
-            background-position: center;
-            padding: 10px;
-            cursor: move;
-            position: absolute;
-            user-select: none;
-            color: black;
-            width: 150px; /* Fixed width */
-            height: 150px; /* Fixed height */
-            min-height: 100px; /* Minimum height */
-            min-width: 100px; /* Minimum width */
-            word-wrap: break-word;
+        #formContainer {
             display: flex;
-            flex-direction: column; /* Allow stacking of elements */
-            align-items: flex-start; /* Align items to the start */
-            justify-content: flex-start; /* Start alignment */
-            text-align: left; /* Left-align text */
-            overflow: hidden; /* Hide overflow */
-            box-shadow: none; /* Remove shadow */
-            font-family: 'Shifty Notes', Arial, sans-serif; /* Use Shifty Notes font for messages */
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        #fromInput {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-        }
-        #messageInput {
-            margin-top: 10px; /* Adjusted margin */
+        #fromInput, #messageInput {
             padding: 10px;
             font-size: 16px;
             width: 300px;
@@ -61,7 +32,6 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
         }
         #charCounter {
             font-size: 14px;
@@ -72,20 +42,19 @@
             color: red; /* Red color for error message */
             margin-top: 5px;
         }
-        .from-text {
-            font-weight: bold; /* Make the "From:" text bold */
-            margin-bottom: 5px; /* Add some space below the "From:" text */
-        }
     </style>
 </head>
 <body>
     <h1>Draelyn's Navy Graduation Countdown</h1>
     <div id="countdown">Loading...</div>
-    <input type="text" id="fromInput" placeholder="From: (optional)"> <!-- New input field for "From:" -->
-    <input type="text" id="messageInput" placeholder="Type your message here">
-    <button id="postButton">Post Message</button>
-    <div id="charCounter">0/150</div> <!-- Character counter updated to 150 -->
-    <div id="charLimitMessage"></div> <!-- Message for character limit -->
+
+    <div id="formContainer">
+        <input type="text" id="fromInput" placeholder="From: (optional)">
+        <input type="text" id="messageInput" placeholder="Type your message here">
+        <button id="postButton">Post Message</button>
+        <div id="charCounter">0/150</div> <!-- Character counter -->
+        <div id="charLimitMessage"></div> <!-- Message for character limit -->
+    </div>
 
     <script>
         // Array of background images
@@ -120,17 +89,14 @@
         }
         countdown();
 
-        // Sticky Notes Functionality
-        document.getElementById("postButton").addEventListener("click", postMessage);
+        // Character count logic
         const messageInput = document.getElementById("messageInput");
-        const fromInput = document.getElementById("fromInput"); // Reference to the "From:" input
         const charCounter = document.getElementById("charCounter");
         const charLimitMessage = document.getElementById("charLimitMessage");
 
-        // Update character count as the user types
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
-            charCounter.textContent = `${currentLength}/150`; // Updated to 150
+            charCounter.textContent = `${currentLength}/150`;
 
             if (currentLength > 150) {
                 charLimitMessage.textContent = "Message cannot exceed 150 characters.";
@@ -139,100 +105,44 @@
             }
         });
 
-        function postMessage() {
+        // Posting message
+        document.getElementById("postButton").addEventListener("click", () => {
+            const from = document.getElementById("fromInput").value;
             const message = messageInput.value;
-            const from = fromInput.value; // Get the value from the "From:" input
 
             if (message.length > 150) {
                 charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-                return; // Stop the function if message is too long
+                return;
             }
 
             if (message.trim() !== "") {
-                createStickyNote(from, message); // Pass the "from" and message to createStickyNote
-                messageInput.value = ""; // Clear input after posting
-                charCounter.textContent = "0/150"; // Reset counter
-                // Don't clear the "From:" input if it has a value
+                createStickyNote(from, message);
+                messageInput.value = ""; // Clear message input after posting
+                charCounter.textContent = "0/150"; // Reset character counter
             }
-        }
+        });
 
+        // Create sticky note function
         function createStickyNote(from, message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
 
-            // Create "From:" text element
+            // Add "From:" field
             const fromText = document.createElement("div");
             fromText.className = "from-text";
-            fromText.textContent = from ? `From: ${from}` : ""; // Format the "From:" text
+            fromText.textContent = from ? `From: ${from}` : "";
+            note.appendChild(fromText);
 
-            note.appendChild(fromText); // Add "From:" text to the note
-            note.appendChild(document.createTextNode(message)); // Add the message text to the note
+            // Add message text
+            const messageText = document.createTextNode(message);
+            note.appendChild(messageText);
 
-            // Set a random background image from the array
-            const randomIndex = Math.floor(Math.random() * 6) + 1; // Generate a number from 1 to 6
-            note.style.backgroundImage = `url('${backgroundImages[randomIndex - 1]}')`; // Use randomIndex - 1
+            // Choose a random image
+            const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+            note.style.backgroundImage = `url('${randomImage}')`;
 
-            // Set random starting position
-            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
-            note.style.top = Math.random() * (window.innerHeight - 100) + "px";
-
-            note.addEventListener("mousedown", mouseDown);
-            note.addEventListener("touchstart", touchStart);
-
+            // Append note to body
             document.body.appendChild(note);
-        }
-
-        let dragNote = null;
-
-        function mouseDown(event) {
-            dragNote = event.target;
-            dragNote.style.zIndex = 10; // Bring the dragged note to the front
-            document.addEventListener("mousemove", mouseMove);
-            document.addEventListener("mouseup", mouseUp);
-            mouseMove(event); // Update position immediately
-            event.preventDefault();
-        }
-
-        function mouseMove(event) {
-            if (dragNote) {
-                dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function mouseUp() {
-            if (dragNote) {
-                dragNote.style.zIndex = ""; // Reset the zIndex
-            }
-            dragNote = null;
-            document.removeEventListener("mousemove", mouseMove);
-            document.removeEventListener("mouseup", mouseUp);
-        }
-
-        function touchStart(event) {
-            dragNote = event.target;
-            dragNote.style.zIndex = 10; // Bring the dragged note to the front
-            document.addEventListener("touchmove", touchMove);
-            document.addEventListener("touchend", touchEnd);
-            touchMove(event);
-            event.preventDefault();
-        }
-
-        function touchMove(event) {
-            if (dragNote) {
-                const touch = event.touches[0];
-                dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
-                dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
-            }
-        }
-
-        function touchEnd() {
-            if (dragNote) {
-                dragNote.style.zIndex = ""; // Reset the zIndex
-            }
-            dragNote = null;
-            document.removeEventListener("touchmove", touchMove);
-            document.removeEventListener("touchend", touchEnd);
         }
     </script>
 </body>
