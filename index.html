@@ -100,9 +100,20 @@
             word-wrap: break-word; /* Older browsers support */
             hyphens: auto; /* Allow hyphenation */
             max-width: 100%; /* Prevent exceeding width */
+            position: relative; /* For positioning the delete button */
         }
         .comment-from {
             font-weight: bold;
+        }
+        .delete-button {
+            color: red;
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2em;
         }
         #clearComments {
             margin-top: 20px;
@@ -254,10 +265,11 @@
         // Load Comments from Firebase
         commentsRef.on("child_added", (snapshot) => {
             const comment = snapshot.val();
-            addComment(comment.from, comment.message);
+            const commentId = snapshot.key; // Get the unique comment ID
+            addComment(commentId, comment.from, comment.message);
         });
 
-        function addComment(from, message) {
+        function addComment(commentId, from, message) {
             const comment = document.createElement("div");
             comment.className = "comment";
 
@@ -270,7 +282,33 @@
             messageText.textContent = message;
             comment.appendChild(messageText);
 
+            // Create delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-button";
+            deleteButton.textContent = "✖"; // Red X
+            deleteButton.onclick = function() {
+                deleteComment(commentId);
+            };
+            comment.appendChild(deleteButton);
+
             document.getElementById("commentsSection").appendChild(comment);
+        }
+
+        function deleteComment(commentId) {
+            const password = prompt("Please enter the password to delete this comment:");
+            const correctPassword = atob("SmJ4bDQ0"); // Decoded password
+
+            if (password === correctPassword) {
+                commentsRef.child(commentId).remove() // Remove specific comment from Firebase
+                    .then(() => {
+                        console.log("Comment deleted successfully!");
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting comment:", error);
+                    });
+            } else {
+                alert("Incorrect password. Comment will not be deleted.");
+            }
         }
 
         // Clear Comments Functionality with Password Protection
