@@ -1,94 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draelyn's Navy Graduation Countdown</title>
-    <style>
-        @font-face {
-            font-family: 'Shifty Notes';
-            src: url('fonts/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the Shifty Notes font */
-            font-weight: normal;
-            font-style: normal;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        @font-face {
-            font-family: 'MyNewFont';
-            src: url('fonts/MyNewFont2.ttf') format('truetype'); /* Path to your new font file */
-            font-weight: normal;
-            font-style: normal;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            background-color: white;
-            color: black;
-        }
-        #countdown {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .sticky-note {
-            background-size: cover;
-            background-position: center;
-            padding: 10px;
-            cursor: move;
-            position: absolute;
-            user-select: none;
-            color: black;
-            width: 150px;
-            height: 150px;
-            min-height: 100px;
-            min-width: 100px;
-            word-wrap: break-word;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            text-align: left;
-            overflow: hidden;
-            font-family: 'MyNewFont', Arial, sans-serif;
-        }
-        #fromInput, #messageInput {
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-        }
-        #postButton {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        #charCounter {
-            font-size: 14px;
-            color: grey;
-            margin-top: 5px;
-        }
-        #charLimitMessage {
-            color: red;
-            margin-top: 5px;
-        }
-        .from-text {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Draelyn's Navy Graduation Countdown</h1>
-    <div id="countdown">Loading...</div>
-    <input type="text" id="fromInput" placeholder="From: (optional)">
-    <input type="text" id="messageInput" placeholder="Type your message here">
-    <button id="postButton">Post Message</button>
-    <div id="charCounter">0/150</div>
-    <div id="charLimitMessage"></div>
+.container {
+    width: 80%;
+    border: 5px solid black;
+    padding: 20px;
+    position: relative;
+}
 
-    <script src="script.js"></script> <!-- Link to your external JavaScript file -->
-</body>
-</html>
+.timer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.timer-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.countdown {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.messages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.message {
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    width: 60px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.send-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
