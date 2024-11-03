@@ -33,6 +33,7 @@
             border: 1px solid black;
             cursor: move;
             position: absolute; /* To make sticky notes draggable */
+            transition: left 0.2s ease, top 0.2s ease; /* Smooth movement */
         }
         #messageInput {
             margin-top: 20px;
@@ -109,8 +110,11 @@
         }
 
         function dragEnd(event) {
-            const x = event.clientX;
-            const y = event.clientY;
+            const boundingRect = document.getElementById("messageBoard").getBoundingClientRect();
+            const x = event.clientX - boundingRect.left; // Get position relative to message board
+            const y = event.clientY - boundingRect.top;
+
+            // Set new position
             dragNote.style.left = `${x}px`;
             dragNote.style.top = `${y}px`;
             dragNote = null;
