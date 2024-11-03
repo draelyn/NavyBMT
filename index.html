@@ -8,14 +8,14 @@
     <style>
         @font-face {
             font-family: 'Shifty Notes';
-            src: url('fonts/ShiftyNotesRegular-BWZ6d.ttf') format('truetype'); /* Path to the Shifty Notes font */
+            src: url('fonts/ShiftyNotesRegular-BWZ6d.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'MyNewFont';
-            src: url('fonts/MyNewFont2.ttf') format('truetype'); /* Path to your new font file */
+            src: url('fonts/MyNewFont2.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -23,15 +23,58 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
             background-color: white;
             color: black;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh; /* Ensures the container takes up the full height */
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+        }
+
         #countdown {
             font-size: 36px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
+
+        #fromInput, #messageInput {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #postButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #charCounter {
+            font-size: 14px;
+            color: grey;
+            margin-top: 5px;
+        }
+
+        #charLimitMessage {
+            color: red;
+            margin-top: 5px;
+        }
+
         .sticky-note {
             background-size: cover;
             background-position: center;
@@ -53,44 +96,41 @@
             overflow: hidden;
             font-family: 'MyNewFont', Arial, sans-serif;
         }
-        #fromInput, #messageInput {
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-        }
-        #postButton {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        #charCounter {
-            font-size: 14px;
-            color: grey;
-            margin-top: 5px;
-        }
-        #charLimitMessage {
-            color: red;
-            margin-top: 5px;
-        }
+
         .from-text {
             font-weight: bold;
             margin-bottom: 5px;
         }
+
+        /* Additional styles for consistent spacing */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            #countdown {
+                font-size: 24px;
+            }
+
+            #fromInput, #messageInput {
+                width: 90%; /* Wider input fields on mobile */
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Draelyn's Navy Graduation Countdown</h1>
-    <div id="countdown">Loading...</div>
-    <input type="text" id="fromInput" placeholder="From: (optional)">
-    <input type="text" id="messageInput" placeholder="Type your message here">
-    <button id="postButton">Post Message</button>
-    <div id="charCounter">0/150</div>
-    <div id="charLimitMessage"></div>
+    <div class="container">
+        <h1>Draelyn's Navy Graduation Countdown</h1>
+        <div id="countdown">Loading...</div>
+        <input type="text" id="fromInput" placeholder="From: (optional)">
+        <input type="text" id="messageInput" placeholder="Type your message here">
+        <button id="postButton">Post Message</button>
+        <div id="charCounter">0/150</div>
+        <div id="charLimitMessage"></div>
+    </div>
 
     <script>
-        // Array of background images
+        // JavaScript functionality remains the same
         const backgroundImages = [
             'https://media.discordapp.net/attachments/996335523901747203/1302525995869536336/Pngtreedownload_for_free_simple_colorful_6860147_2.png?ex=67286f5d&is=67271ddd&hm=6298192991a93e3e06f204c1756dcf987ad7d66e5d8a055122fd0cc33a7afb73&=&format=webp&quality=lossless',
             'https://media.discordapp.net/attachments/996335523901747203/1302526255136116768/Pngtreedownload_for_free_simple_colorful_6860147_4.png?ex=67286f9a&is=67271e1a&hm=d76507339e7b36b280a99f214c947243e7ec5a72550c8a858dfbf99608d1f5a4&=&format=webp&quality=lossless',
@@ -100,13 +140,11 @@
             'https://media.discordapp.net/attachments/996335523901747203/1302526525261746176/Pngtreedownload_for_free_simple_colorful_6860147_5.png?ex=67286fdb&is=67271e5b&hm=0ca66ef71ca72ccafb7ac4cf3e430f61d7d7281eb2809f228779ae411877f18a&=&format=webp&quality=lossless',
         ];
 
-        // Countdown Timer Function
         function countdown() {
             const targetDate = new Date("January 21, 2025 09:00:00 GMT-0500").getTime();
             setInterval(function() {
                 const now = new Date().getTime();
                 const timeLeft = targetDate - now;
-
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
@@ -122,7 +160,6 @@
         }
         countdown();
 
-        // Sticky Notes Functionality
         document.getElementById("postButton").addEventListener("click", postMessage);
         const messageInput = document.getElementById("messageInput");
         const fromInput = document.getElementById("fromInput");
@@ -132,23 +169,13 @@
         messageInput.addEventListener("input", () => {
             const currentLength = messageInput.value.length;
             charCounter.textContent = `${currentLength}/150`;
-
-            if (currentLength > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-            } else {
-                charLimitMessage.textContent = "";
-            }
+            charLimitMessage.textContent = currentLength > 150 ? "Message cannot exceed 150 characters." : "";
         });
 
         function postMessage() {
             const message = messageInput.value;
             const from = fromInput.value;
-
-            if (message.length > 150) {
-                charLimitMessage.textContent = "Message cannot exceed 150 characters.";
-                return;
-            }
-
+            if (message.length > 150) return;
             if (message.trim() !== "") {
                 createStickyNote(from, message);
                 messageInput.value = "";
@@ -160,28 +187,21 @@
         function createStickyNote(from, message) {
             const note = document.createElement("div");
             note.className = "sticky-note";
-
             const fromText = document.createElement("div");
             fromText.className = "from-text";
             fromText.textContent = from ? `From: ${from}` : "";
-
             note.appendChild(fromText);
             note.appendChild(document.createTextNode(message));
-
             const randomIndex = Math.floor(Math.random() * backgroundImages.length);
             note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
-
             note.style.left = Math.random() * (window.innerWidth - 150) + "px";
             note.style.top = Math.random() * (window.innerHeight - 150) + "px";
-
             note.addEventListener("mousedown", mouseDown);
             note.addEventListener("touchstart", touchStart);
-
-            document.body.appendChild(note);
+            document.querySelector(".container").appendChild(note);
         }
 
         let dragNote = null;
-
         function mouseDown(event) {
             dragNote = event.target;
             dragNote.style.zIndex = 10;
@@ -190,23 +210,18 @@
             mouseMove(event);
             event.preventDefault();
         }
-
         function mouseMove(event) {
             if (dragNote) {
                 dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
                 dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
             }
         }
-
         function mouseUp() {
-            if (dragNote) {
-                dragNote.style.zIndex = "";
-            }
+            dragNote.style.zIndex = "";
             dragNote = null;
             document.removeEventListener("mousemove", mouseMove);
             document.removeEventListener("mouseup", mouseUp);
         }
-
         function touchStart(event) {
             dragNote = event.target;
             dragNote.style.zIndex = 10;
@@ -215,7 +230,6 @@
             touchMove(event);
             event.preventDefault();
         }
-
         function touchMove(event) {
             if (dragNote) {
                 const touch = event.touches[0];
@@ -223,11 +237,8 @@
                 dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
             }
         }
-
         function touchEnd() {
-            if (dragNote) {
-                dragNote.style.zIndex = "";
-            }
+            dragNote.style.zIndex = "";
             dragNote = null;
             document.removeEventListener("touchmove", touchMove);
             document.removeEventListener("touchend", touchEnd);
