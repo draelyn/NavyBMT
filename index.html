@@ -96,9 +96,25 @@
         .comment {
             border-bottom: 2px solid black; /* Black border for comment lines */
             padding: 10px 0;
+            overflow-wrap: break-word; /* Prevent text overflow */
+            word-wrap: break-word; /* Older browsers support */
+            hyphens: auto; /* Allow hyphenation */
+            max-width: 100%; /* Prevent exceeding width */
         }
         .comment-from {
             font-weight: bold;
+        }
+        #clearComments {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid black;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #clearComments:hover {
+            background-color: #f0f0f0;
         }
     </style>
 </head>
@@ -133,6 +149,7 @@
         <div class="comments-section" id="commentsSection">
             <h2>Comments</h2>
         </div>
+        <button id="clearComments">Clear All Comments</button>
     </div>
 
     <!-- Corrected Firebase SDKs for non-module usage -->
@@ -255,6 +272,18 @@
 
             document.getElementById("commentsSection").appendChild(comment);
         }
+
+        // Clear Comments Functionality
+        document.getElementById("clearComments").addEventListener("click", () => {
+            commentsRef.remove() // Remove all comments from Firebase
+                .then(() => {
+                    document.getElementById("commentsSection").innerHTML = "<h2>Comments</h2>"; // Clear displayed comments
+                    console.log("All comments cleared successfully!");
+                })
+                .catch((error) => {
+                    console.error("Error clearing comments:", error);
+                });
+        });
     </script>
 </body>
 </html>
