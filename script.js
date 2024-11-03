@@ -24,40 +24,112 @@ function countdown() {
 countdown();
 
 // Sticky Notes Functionality
-document.getElementById("postButton").addEventListener("click", function() {
-    const message = document.getElementById("messageInput").value;
-    if (message.trim() !== "") {
-        createStickyNote(message);
-        document.getElementById("messageInput").value = "";
+document.getElementById("postButton").addEventListener("click", postMessage);
+const messageInput = document.getElementById("messageInput");
+const fromInput = document.getElementById("fromInput");
+const charCounter = document.getElementById("charCounter");
+const charLimitMessage = document.getElementById("charLimitMessage");
+
+messageInput.addEventListener("input", () => {
+    const currentLength = messageInput.value.length;
+    charCounter.textContent = `${currentLength}/150`;
+
+    if (currentLength > 150) {
+        charLimitMessage.textContent = "Message cannot exceed 150 characters.";
+    } else {
+        charLimitMessage.textContent = "";
     }
 });
 
-function createStickyNote(message) {
+function postMessage() {
+    const message = messageInput.value;
+    const from = fromInput.value;
+
+    if (message.length > 150) {
+        charLimitMessage.textContent = "Message cannot exceed 150 characters.";
+        return;
+    }
+
+    if (message.trim() !== "") {
+        createStickyNote(from, message);
+        messageInput.value = "";
+        fromInput.value = "";
+        charCounter.textContent = "0/150";
+    }
+}
+
+function createStickyNote(from, message) {
     const note = document.createElement("div");
     note.className = "sticky-note";
-    note.textContent = message;
 
-    // Make the note draggable
-    note.style.left = Math.random() * 500 + "px"; // Random starting position
-    note.style.top = Math.random() * 200 + "px"; // Random starting position
-    note.draggable = true;
+    const fromText = document.createElement("div");
+    fromText.className = "from-text";
+    fromText.textContent = from ? `From: ${from}` : "";
 
-    note.addEventListener("dragstart", dragStart);
-    note.addEventListener("dragend", dragEnd);
+    note.appendChild(fromText);
+    note.appendChild(document.createTextNode(message));
 
-    document.getElementById("messageBoard").appendChild(note);
+    const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+    note.style.backgroundImage = `url('${backgroundImages[randomIndex]}')`;
+
+    note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    note.style.top = Math.random() * (window.innerHeight - 100) + "px";
+
+    note.addEventListener("mousedown", mouseDown);
+    note.addEventListener("touchstart", touchStart);
+
+    document.body.appendChild(note);
 }
 
 let dragNote = null;
-function dragStart(event) {
+
+function mouseDown(event) {
     dragNote = event.target;
-    event.dataTransfer.setData("text/plain", "");
+    dragNote.style.zIndex = 10;
+    document.addEventListener("mousemove", mouseMove);
+    document.addEventListener("mouseup", mouseUp);
+    mouseMove(event);
+    event.preventDefault();
 }
 
-function dragEnd(event) {
-    const x = event.clientX;
-    const y = event.clientY;
-    dragNote.style.left = `${x}px`;
-    dragNote.style.top = `${y}px`;
+function mouseMove(event) {
+    if (dragNote) {
+        dragNote.style.left = `${event.clientX - (dragNote.clientWidth / 2)}px`;
+        dragNote.style.top = `${event.clientY - (dragNote.clientHeight / 2)}px`;
+    }
+}
+
+function mouseUp() {
+    if (dragNote) {
+        dragNote.style.zIndex = "";
+    }
     dragNote = null;
+    document.removeEventListener("mousemove", mouseMove);
+    document.removeEventListener("mouseup", mouseUp);
+}
+
+function touchStart(event) {
+    dragNote = event.target;
+    dragNote.style.zIndex = 10;
+    document.addEventListener("touchmove", touchMove);
+    document.addEventListener("touchend", touchEnd);
+    touchMove(event);
+    event.preventDefault();
+}
+
+function touchMove(event) {
+    if (dragNote) {
+        const touch = event.touches[0];
+        dragNote.style.left = `${touch.clientX - (dragNote.clientWidth / 2)}px`;
+        dragNote.style.top = `${touch.clientY - (dragNote.clientHeight / 2)}px`;
+    }
+}
+
+function touchEnd() {
+    if (dragNote) {
+        dragNote.style.zIndex = "";
+    }
+    dragNote = null;
+    document.removeEventListener("touchmove", touchMove);
+    document.removeEventListener("touchend", touchEnd);
 }
